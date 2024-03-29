@@ -16,11 +16,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ViewModelComponent::class)
 class HiltModule {
-    @Singleton
+
+//    @Singleton
     @Provides
     fun provideSharedViewModel(): SharedViewModel = SharedViewModel()
 
-    @Singleton
+
     @Provides
     fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
         return context.createDataStore(name = "user")
