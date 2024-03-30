@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.devrachit.chocochipreader.QrCodeAnalyzer
 import com.devrachit.chocochipreader.R
@@ -90,7 +91,7 @@ fun scanScreen( navController: NavController) {
             ) == PackageManager.PERMISSION_GRANTED
         )
     }
-
+    val viewModel = hiltViewModel<ScanScreenViewModel>()
     val options = listOf("day 1", "day 2", "day 3", "day 4")
     var selectedIndex by remember { mutableStateOf(0) }
     var expanded by remember { mutableStateOf(false) }
@@ -133,9 +134,12 @@ fun scanScreen( navController: NavController) {
                             .build()
                         imageAnalysis.setAnalyzer(
                             ContextCompat.getMainExecutor(context),
-                            QrCodeAnalyzer {
-
-                                code = it
+                            QrCodeAnalyzer { scannedCode ->
+                                if(code!=scannedCode)
+                                {
+                                    code = scannedCode
+                                    viewModel.onScanRecieved(scannedCode)
+                                }
                             }
                         )
                         try {

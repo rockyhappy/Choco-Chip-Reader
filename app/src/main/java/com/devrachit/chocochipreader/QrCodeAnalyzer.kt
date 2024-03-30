@@ -6,6 +6,9 @@ import android.graphics.Matrix
 import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.devrachit.chocochipreader.Models.SharedViewModel
+import com.devrachit.chocochipreader.ui.dashboardScreen.scannerScreen.ScanScreenViewModel
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.ChecksumException
@@ -19,7 +22,8 @@ import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 
 class QrCodeAnalyzer(
-    private val onQrCodeScanned: (String) -> Unit
+    private val onQrCodeScanned: (String) -> Unit,
+//    private val viewModel: ScanScreenViewModel
 ): ImageAnalysis.Analyzer {
 
     private val supportedImageFormats = listOf(
@@ -60,7 +64,10 @@ class QrCodeAnalyzer(
                         )
                     )
                 }.decode(binaryBmp)
+//                val viewModel = ScanScreenViewModel()
+//                viewModel.onScanRecieved(result.text)
                 onQrCodeScanned(result.text)
+
 
             } catch (e: Exception) {
                 e.printStackTrace()
