@@ -23,34 +23,51 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.ui.theme.primaryColor
+import androidx.hilt.navigation.compose.hiltViewModel
+
 
 @Composable
 fun loginScreen(navController: NavController) {
+
+    val loginViewModel = hiltViewModel<LoginScreenViewModel>()
+
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     var loginOnClick: () -> Unit = {
-        if (username == "admin" && password == "admin") {
-            navController.navigate("home")
+        if (username != null && password != null) {
+            loginViewModel.login(username, password)
         }
     }
 
     backBox()
-    photo()
-    Column(
-        modifier = Modifier
-            .padding(top = 50.dp)
-            .zIndex(1f)
+    Row(
+        modifier= Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.75f)
+            .padding(top=50.dp),
+    )
+    {
 
-    ) {
-        Heading(title = "Workshop")
-        Heading(title = "Attendance")
+        Column(
+            modifier = Modifier
+//                .padding(top = 50.dp)
+                .zIndex(1f)
+
+        ) {
+            Heading(title = "Workshop")
+            Heading(title = "Attendance")
+        }
+        photo()
     }
+
 
     Column(
         modifier = Modifier
@@ -63,7 +80,8 @@ fun loginScreen(navController: NavController) {
             text = "Enter your Username",
             color = Color.White,
             fontSize = 15.sp,
-            modifier = Modifier.padding(start = 30.dp, top = 10.dp, bottom = 10.dp)
+            modifier = Modifier.padding(start = 30.dp, top = 10.dp, bottom = 10.dp),
+            fontFamily = customFontFamily,
         )
         TextField(
             value = username,
@@ -79,13 +97,15 @@ fun loginScreen(navController: NavController) {
                 unfocusedContainerColor = Color.White,
                 focusedTextColor = Color.Black,
                 unfocusedTextColor = Color.Black
-            )
+            ),
+
         )
         Text(
             text = "Enter your Password",
             color = Color.White,
             fontSize = 15.sp,
-            modifier = Modifier.padding(start = 30.dp, top = 30.dp, bottom = 10.dp)
+            modifier = Modifier.padding(start = 30.dp, top = 30.dp, bottom = 10.dp),
+            fontFamily = customFontFamily,
         )
         TextField(
             value = password,
@@ -106,7 +126,7 @@ fun loginScreen(navController: NavController) {
     }
     Column(
         modifier = Modifier
-            .fillMaxHeight(0.78f)
+            .fillMaxHeight(0.80f)
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -117,7 +137,7 @@ fun loginScreen(navController: NavController) {
         Button(
             onClick = { loginOnClick() },
             modifier = Modifier
-                .padding(start = 30.dp, end = 30.dp, top = 30.dp)
+                .padding(start = 30.dp, end = 30.dp, top = 30.dp, bottom=30.dp)
                 .width(230.dp)
                 .clip(RoundedCornerShape(10.dp)),
             colors = ButtonDefaults.buttonColors(
@@ -126,9 +146,13 @@ fun loginScreen(navController: NavController) {
 
                 )
             ,
-            elevation = ButtonDefaults.buttonElevation(3.dp, 10.dp, 3.dp)
+            elevation = ButtonDefaults.buttonElevation(5.dp, 10.dp, 5.dp)
         ) {
-            Text(text = "Login")
+            Text(text = "Login",
+                fontFamily = customFontFamily,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = primaryColor)
         }
     }
 }

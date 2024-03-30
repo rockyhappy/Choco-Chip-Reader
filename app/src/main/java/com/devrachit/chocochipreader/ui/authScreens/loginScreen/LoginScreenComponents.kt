@@ -14,12 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.R
 import com.devrachit.chocochipreader.ui.theme.primaryColor
 
@@ -49,22 +51,23 @@ fun backBox()
 @Composable
 fun photo()
 {
-    Image(contentDescription =null, painter = painterResource(id = R.drawable.logo1),
+    Image(contentDescription =null, painter = painterResource(id = R.drawable.img),
         modifier = Modifier
-            .padding(start=200.dp,top=30.dp)
-            .height(200.dp)
+            .padding(start=30.dp,top=20.dp)
+            .height(150.dp)
             .clip(RoundedCornerShape(20.dp))
-            .zIndex(1f)
+            .zIndex(1f),
+        contentScale = ContentScale.Crop
     )
 }
 @Composable
 fun Heading(title: String)
 {
     Text(text = title,
+        fontFamily = customFontFamily,
         modifier = Modifier.padding(start=20.dp,top=20.dp),
         fontSize = 30.sp,
         fontWeight = FontWeight.Bold,
         color = Color.White,
-//        fontfamily = FontFamily.Serif
         )
 }
