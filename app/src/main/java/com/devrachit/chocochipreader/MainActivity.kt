@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
                             imageAnalysis.setAnalyzer(
                                 ContextCompat.getMainExecutor(context),
                                 QrCodeAnalyzer {
-                                    // Handle scanned QR code
+
                                     code = it
                                 }
                             )
@@ -121,6 +121,7 @@ class MainActivity : ComponentActivity() {
                             fontWeight = FontWeight.Bold
                         )
                     }
+
                 }
             }
         }
