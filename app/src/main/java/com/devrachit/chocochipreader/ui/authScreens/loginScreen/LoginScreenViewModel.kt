@@ -11,6 +11,8 @@ import com.devrachit.chocochipreader.Models.LoginRequest
 import com.devrachit.chocochipreader.Models.SharedViewModel
 import com.devrachit.chocochipreader.network.RetrofitInstance
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,9 +22,15 @@ class LoginScreenViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : ViewModel(){
 
+    private val _loading = MutableStateFlow(false)
+    val loading= _loading.asStateFlow()
+
+    private val _loginComplete = MutableStateFlow(false)
+    val loginComplete= _loginComplete.asStateFlow()
 
 
     fun login(email:String,password:String){
+        _loading.value=true
         val loginRequest= LoginRequest(
             username = email,
             password = password)
@@ -33,13 +41,16 @@ class LoginScreenViewModel @Inject constructor(
                     val token = response.body()?.access
                     if(token!=null){
                         save("token",token)
-                        Log.d("token",token)
+//                        Log.d("token",token)
 //                        sharedViewModel.setToken(token)
+                        _loginComplete.value=true
                     }
                 }
                 else{
 //                    sharedViewModel.setErrorMessage(response.message())
                 }
+                _loading.value=false
+
             }
             catch(e:Exception){
 //                sharedViewModel.setErrorMessage(e.message.toString())

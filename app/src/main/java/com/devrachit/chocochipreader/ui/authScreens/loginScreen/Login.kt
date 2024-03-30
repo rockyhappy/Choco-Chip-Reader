@@ -1,5 +1,6 @@
 package com.devrachit.chocochipreader.ui.authScreens.loginScreen
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,13 +34,18 @@ import androidx.navigation.NavController
 import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.ui.theme.primaryColor
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.devrachit.chocochipreader.Auth
+import com.devrachit.chocochipreader.MainActivity
 
 
 @Composable
 fun loginScreen(navController: NavController) {
 
     val loginViewModel = hiltViewModel<LoginScreenViewModel>()
-
+    val context = LocalContext.current
+    val loading= loginViewModel.loading.collectAsStateWithLifecycle()
+    val loginComplete= loginViewModel.loginComplete.collectAsStateWithLifecycle()
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -46,7 +54,13 @@ fun loginScreen(navController: NavController) {
             loginViewModel.login(username, password)
         }
     }
-
+    LaunchedEffect(key1 = loginComplete.value) {
+        if (loginComplete.value) {
+            val intent= Intent(context, MainActivity::class.java)
+            context.startActivity(intent)
+            (context as Auth).finish()
+        }
+    }
     backBox()
     Row(
         modifier= Modifier
@@ -146,7 +160,8 @@ fun loginScreen(navController: NavController) {
 
                 )
             ,
-            elevation = ButtonDefaults.buttonElevation(5.dp, 10.dp, 5.dp)
+            elevation = ButtonDefaults.buttonElevation(5.dp, 10.dp, 5.dp),
+            enabled = !loading.value
         ) {
             Text(text = "Login",
                 fontFamily = customFontFamily,
