@@ -1,6 +1,7 @@
 package com.devrachit.chocochipreader.network
 
 import com.devrachit.chocochipreader.Models.DetailsResponse
+import com.devrachit.chocochipreader.Models.LoginRequest
 import com.devrachit.chocochipreader.Models.LoginResponse
 import com.devrachit.chocochipreader.Models.finalAtendenceResponse
 import retrofit2.Response
@@ -13,14 +14,12 @@ import retrofit2.http.Path
 
 interface ApiService {
 
-    @FormUrlEncoded
-    @POST("generate/")
+    @POST("generateToken/")
     suspend fun login(
-        @Field("username") field1: String,
-        @Field("password") field2: String
+       @Body request : LoginRequest
     ): Response<LoginResponse>
 
-    @GET("details/{id}")
+    @GET("attendance/details/{id}")
     suspend fun getDetails(
         @Path("id") id: String
     ): Response<DetailsResponse>

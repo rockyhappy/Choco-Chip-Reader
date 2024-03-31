@@ -47,6 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -76,14 +77,19 @@ fun scanScreen(navController: NavController) {
     var showNumberPad by remember { mutableStateOf(false) }
 
 
-
-    val markPresent :() -> Unit ={
+    val markPresent: () -> Unit = {
         viewModel.markPresent(options[selectedIndex])
     }
 
     val onFlashClick: () -> Unit = {
         isFlashOn = !isFlashOn
-//        markPresent()
+    }
+
+    val onManualEntry: (String) -> Unit = { code ->
+        if (code != null && code != "") {
+            showNumberPad = false
+            viewModel.onScanRecieved(code)
+        }
     }
 
     val cameraProvider = cameraProviderFuture.get()
@@ -105,7 +111,6 @@ fun scanScreen(navController: NavController) {
     }
 
 
-
     /**
      * These are the variables to manage the scan state
      */
@@ -122,8 +127,7 @@ fun scanScreen(navController: NavController) {
         }
         markAttendanceEnabledButton = false
     }
-    if(!loading.value)
-    {
+    if (!loading.value) {
         markAttendanceEnabledButton = true
     }
 
@@ -131,23 +135,22 @@ fun scanScreen(navController: NavController) {
      * This will manage the manual entry of the code
      */
 
-    if(enterManually)
-    {
+    if (enterManually) {
         showNumberPad = true
         enterManually = false
     }
-    if(showNumberPad)
-    {
+    if (showNumberPad) {
+//        LocalTextInputService provides null
         ModalBottomSheet(
             onDismissRequest = {
                 showNumberPad = false
             },
             sheetState = rememberModalBottomSheetState(),
-            modifier= Modifier
+            modifier = Modifier
                 .wrapContentHeight(),
             containerColor = Color.White
         ) {
-            numberPad(onFlashClick)
+            numberPad(onManualEntry)
         }
     }
 
@@ -167,12 +170,12 @@ fun scanScreen(navController: NavController) {
                 showBottomSheet = false
             },
             sheetState = sheetState,
-            modifier= Modifier
+            modifier = Modifier
                 .wrapContentHeight(),
             containerColor = Color.White
         ) {
             val data = viewModel.sharedViewModel.data
-            head(data = data, markPresent , markAttendanceEnabledButton)
+            head(data = data, markPresent, markAttendanceEnabledButton)
 
         }
     }

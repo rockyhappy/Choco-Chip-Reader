@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -37,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -194,7 +196,7 @@ fun head(data: LiveData<DetailsResponse>, onClick: () -> Unit, enabled: Boolean)
 }
 
 @Composable
-fun numberPad(onClick: () -> Unit){
+fun numberPad(onClick: (String) -> Unit  ){
 
     var value by remember { mutableStateOf("") }
     Column(
@@ -225,13 +227,18 @@ fun numberPad(onClick: () -> Unit){
                     focusedBorderColor = primaryColor,
                     unfocusedBorderColor = primaryColor
                 ),
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                readOnly = true,
+                placeholder = {
+                    Text(text = "Enter Student Number")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
                     .height(60.dp)
             )
             Button(
-                onClick = {onClick()},
+                onClick = {onClick(value)},
                 modifier = Modifier
                     .width(100.dp)
                     .height(60.dp)

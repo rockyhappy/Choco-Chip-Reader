@@ -36,12 +36,12 @@ class LoginScreenViewModel @Inject constructor(
             password = password)
         viewModelScope.launch {
             try{
-                val response = RetrofitInstance.apiService.login(email,password)
+                val response = RetrofitInstance.apiService.login(loginRequest)
                 if(response.isSuccessful){
                     val token = response.body()?.access
                     if(token!=null){
                         save("token",token)
-//                        Log.d("token",token)
+                        Log.d("token",token)
 //                        sharedViewModel.setToken(token)
                         _loginComplete.value=true
                     }
