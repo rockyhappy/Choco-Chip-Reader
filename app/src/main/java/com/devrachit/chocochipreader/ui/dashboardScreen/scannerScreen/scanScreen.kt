@@ -30,7 +30,9 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -48,6 +50,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalTextInputService
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -58,6 +61,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.devrachit.chocochipreader.QrCodeAnalyzer
 import com.devrachit.chocochipreader.R
+import com.devrachit.chocochipreader.ui.theme.successColor
 
 @ExperimentalMaterial3Api
 @Composable
@@ -75,14 +79,11 @@ fun scanScreen(navController: NavController) {
     var markAttendanceEnabledButton by remember { mutableStateOf(true) }
     var enterManually by remember { mutableStateOf(false) }
     var showNumberPad by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+    var barcodeAnalysisEnabled by remember { mutableStateOf(true) }
 
 
-    val markPresent: () -> Unit = {
-        viewModel.markPresent(
-            student_number = code,
-            day=options[selectedIndex]
-        )
-    }
+
 
     val onFlashClick: () -> Unit = {
         isFlashOn = !isFlashOn
@@ -115,9 +116,7 @@ fun scanScreen(navController: NavController) {
     }
 
 
-    /**
-     * These are the variables to manage the scan state
-     */
+
     val loading = viewModel.loading.collectAsStateWithLifecycle()
 
     if (loading.value) {
@@ -135,9 +134,7 @@ fun scanScreen(navController: NavController) {
         markAttendanceEnabledButton = true
     }
 
-    /**
-     * This will manage the manual entry of the code
-     */
+
 
     if (enterManually) {
         showNumberPad = true
@@ -149,7 +146,7 @@ fun scanScreen(navController: NavController) {
             onDismissRequest = {
                 showNumberPad = false
             },
-            sheetState = rememberModalBottomSheetState(),
+            sheetState = sheetState,
             modifier = Modifier
                 .wrapContentHeight(),
             containerColor = Color.White
@@ -158,15 +155,19 @@ fun scanScreen(navController: NavController) {
         }
     }
 
-    /**
-     * These will manage if the scan is successful and the data is achieved then what to do
-     */
     var scanSuccess = viewModel.scanSuccess.collectAsStateWithLifecycle()
-    val sheetState = rememberModalBottomSheetState()
+
     var showBottomSheet by remember { mutableStateOf(false) }
     if (scanSuccess.value) {
         showBottomSheet = true
-        viewModel._scanSuccess.value = false
+        viewModel.onScanSuccess()
+    }
+    val markPresent: () -> Unit = {
+        showBottomSheet = false
+        viewModel.markPresent(
+            student_number = code,
+            day=options[selectedIndex]
+        )
     }
     if (showBottomSheet) {
         ModalBottomSheet(
@@ -194,6 +195,12 @@ fun scanScreen(navController: NavController) {
         launcher.launch(Manifest.permission.CAMERA)
     }
 
+    val scanComplete= viewModel.scanComplete.collectAsStateWithLifecycle()
+
+    if(scanComplete.value) {
+        Toast.makeText(context, "Attendance ${code} marked", Toast.LENGTH_LONG).show()
+        viewModel.onScanComplete()
+    }
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -222,7 +229,7 @@ fun scanScreen(navController: NavController) {
                         imageAnalysis.setAnalyzer(
                             ContextCompat.getMainExecutor(context),
                             QrCodeAnalyzer { scannedCode ->
-                                if (code != scannedCode) {
+                                if (barcodeAnalysisEnabled && code != scannedCode) {
                                     code = scannedCode
                                     viewModel.onScanRecieved(scannedCode)
                                 }

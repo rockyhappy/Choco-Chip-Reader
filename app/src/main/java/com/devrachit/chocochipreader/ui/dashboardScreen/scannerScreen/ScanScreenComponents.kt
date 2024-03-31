@@ -23,7 +23,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,12 +45,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.Models.DetailsResponse
 import com.devrachit.chocochipreader.R
 import com.devrachit.chocochipreader.ui.theme.grayShade1
 import com.devrachit.chocochipreader.ui.theme.primaryColor
 import com.devrachit.chocochipreader.ui.theme.secondaryColor
+import com.devrachit.chocochipreader.ui.theme.successColor
 
 
 @Composable
@@ -88,7 +92,7 @@ fun CircularIconButton(
 fun head(data: LiveData<DetailsResponse>, onClick: () -> Unit, enabled: Boolean) {
     Column(
         modifier = Modifier
-            .padding(10.dp)
+            .padding(30.dp)
     ) {
         Row()
         {
@@ -106,7 +110,9 @@ fun head(data: LiveData<DetailsResponse>, onClick: () -> Unit, enabled: Boolean)
                 fontFamily = customFontFamily,
 //                fontWeight = Bold,
                 fontStyle = FontStyle.Normal,
-                color = Color.Black
+                color = Color.Black,
+                modifier=Modifier
+                    .padding(start=10.dp)
             )
         }
         Row()
@@ -125,7 +131,9 @@ fun head(data: LiveData<DetailsResponse>, onClick: () -> Unit, enabled: Boolean)
                 fontFamily = customFontFamily,
 //                fontWeight = Bold,
                 fontStyle = FontStyle.Normal,
-                color = Color.Black
+                color = Color.Black,
+                modifier=Modifier
+                    .padding(start=10.dp)
             )
         }
         Row()
@@ -144,7 +152,9 @@ fun head(data: LiveData<DetailsResponse>, onClick: () -> Unit, enabled: Boolean)
                 fontFamily = customFontFamily,
 //                fontWeight = Bold,
                 fontStyle = FontStyle.Normal,
-                color = Color.Black
+                color = Color.Black,
+                modifier=Modifier
+                    .padding(start=10.dp)
             )
         }
         Row()
@@ -163,7 +173,9 @@ fun head(data: LiveData<DetailsResponse>, onClick: () -> Unit, enabled: Boolean)
                 fontFamily = customFontFamily,
 //                fontWeight = Bold,
                 fontStyle = FontStyle.Normal,
-                color = Color.Black
+                color = Color.Black,
+                modifier=Modifier
+                    .padding(start=10.dp)
             )
         }
         Row(
@@ -176,18 +188,22 @@ fun head(data: LiveData<DetailsResponse>, onClick: () -> Unit, enabled: Boolean)
         )
         {
             Button(
-                onClick = {
-                onClick()
-                },
+                onClick = {onClick()},
                 enabled = enabled,
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(60.dp)
+                    .weight(0.4f),
+                shape = RoundedCornerShape(16.dp,16.dp,16.dp,16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.White,
+                    containerColor = primaryColor
+                )
             ) {
-                Text(
-                    text = "Mark Present",
+                Text(text = "Mark Attendance",
+                    color = Color.White,
+                    fontSize = 15.sp,
                     fontFamily = customFontFamily,
-                    fontSize = 20.sp,
-//                fontWeight = Bold,
-                    fontStyle = FontStyle.Normal,
-                    color = Color.Black
                 )
             }
         }
@@ -442,11 +458,35 @@ fun numberPad(onClick: (String) -> Unit  ){
     }
 
 }
+@Composable
+fun showSuccessSnackBar(onClick: () -> Unit)
+{
+    Snackbar(
+        modifier = Modifier.padding(16.dp),
+        action = {
+            TextButton(onClick = { onClick() }) {
+                Text(text = "Dismiss")
+            }
+        },
+        containerColor = successColor
+    ) {
+        Text(text = "Attendance Marked")
+    }
+}
 
 
+
+//@Preview
+//@Composable
+//fun PreviewHead()
+//{
+//    val data = DetailsResponse("rachit", "rachit", "rachit", true)
+//    head(data = data, onClick = {}, enabled = true)
+//}
 @Preview
 @Composable
-fun PreviewHead()
-{
- numberPad(onClick = {})
+fun PreviewHead() {
+    val data = remember { MutableLiveData<DetailsResponse>() }
+    data.value = DetailsResponse("rachit", "rachit", "rachit", true)
+    head(data = data, onClick = {}, enabled = true)
 }

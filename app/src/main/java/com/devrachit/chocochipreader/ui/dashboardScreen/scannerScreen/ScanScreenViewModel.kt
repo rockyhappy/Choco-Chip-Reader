@@ -24,11 +24,18 @@ class ScanScreenViewModel @Inject constructor(
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
-    private val _scanComplete = MutableStateFlow(false)
-    val scanComplete = _scanComplete.asStateFlow()
+     var _scanComplete = MutableStateFlow(false)
+    var scanComplete = _scanComplete.asStateFlow()
 
     var _scanSuccess = MutableStateFlow(false)
     var scanSuccess = _scanSuccess.asStateFlow()
+
+    fun onScanComplete() {
+        _scanComplete.value = false
+    }
+    fun onScanSuccess() {
+        _scanSuccess.value = false
+    }
     fun onScanRecieved(barcodeInfo: String) {
 
         viewModelScope.launch {
