@@ -11,6 +11,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val primaryColor= Color(0xFF1A73E9)
+val secondaryColor=Color(0xFFEAF3FF)
 val errorColor=Color(0xFFFF7E7E)
 val gray=Color(0xFFB3B3B3)
 val lightGray=Color(0xFF999999)

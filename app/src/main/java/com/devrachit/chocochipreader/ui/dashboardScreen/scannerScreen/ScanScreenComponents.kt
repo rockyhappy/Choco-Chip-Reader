@@ -1,5 +1,6 @@
 package com.devrachit.chocochipreader.ui.dashboardScreen.scannerScreen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,10 +13,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,12 +37,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.Models.DetailsResponse
+import com.devrachit.chocochipreader.R
 import com.devrachit.chocochipreader.ui.theme.grayShade1
+import com.devrachit.chocochipreader.ui.theme.primaryColor
+import com.devrachit.chocochipreader.ui.theme.secondaryColor
 
 
 @Composable
@@ -150,7 +167,8 @@ fun head(data: LiveData<DetailsResponse>, onClick: () -> Unit, enabled: Boolean)
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier
+                .padding(10.dp)
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally)
         )
@@ -175,3 +193,253 @@ fun head(data: LiveData<DetailsResponse>, onClick: () -> Unit, enabled: Boolean)
     }
 }
 
+@Composable
+fun numberPad(onClick: () -> Unit){
+
+    var value by remember { mutableStateOf("") }
+    Column(
+        modifier= Modifier
+            .background(Color.White)
+            .padding(start = 30.dp, end = 30.dp)
+    )
+    {
+        Row(
+            modifier=Modifier
+                .fillMaxWidth()
+                .padding(top=20.dp, bottom =20.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+
+        )
+        {
+            OutlinedTextField(
+                value = value,
+                onValueChange = { value = it },
+                shape = RoundedCornerShape(16.dp,0.dp,0.dp,16.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = primaryColor,
+                    focusedBorderColor = primaryColor,
+                    unfocusedBorderColor = primaryColor
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .height(60.dp)
+            )
+            Button(
+                onClick = {onClick()},
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(60.dp)
+                    .weight(0.4f),
+                shape = RoundedCornerShape(0.dp,16.dp,16.dp,0.dp),
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.White,
+                    containerColor = primaryColor
+                )
+            ) {
+                Text(text = "OK", color = Color.White)
+            }
+        }
+        Row(
+            modifier=Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        )
+        {
+            OutlinedButton(
+                onClick = {value+="1"},
+                border = BorderStroke(0.5.dp, secondaryColor),
+                shape = RoundedCornerShape(15),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black,
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .weight(1f)
+            ) {
+                Text(text = "1")
+            }
+            OutlinedButton(
+                onClick = {value+="2"},
+                border = BorderStroke(0.5.dp, secondaryColor),
+                shape = RoundedCornerShape(15),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black,
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .weight(1f)
+            ) {
+                Text(text = "2")
+            }
+            OutlinedButton(
+                onClick = {value+="3"},
+                border = BorderStroke(0.5.dp, secondaryColor),
+                shape = RoundedCornerShape(15),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black,
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .weight(1f)
+            ) {
+                Text(text = "3")
+            }
+        }
+        Row(
+            modifier=Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        )
+        {
+            OutlinedButton(
+                onClick = {value+="4"},
+                border = BorderStroke(0.5.dp, secondaryColor),
+                shape = RoundedCornerShape(15),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black,
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .weight(1f)
+            ) {
+                Text(text = "4")
+            }
+            OutlinedButton(
+                onClick = {value+="5"},
+                border = BorderStroke(0.5.dp, secondaryColor),
+                shape = RoundedCornerShape(15),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black,
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .weight(1f)
+            ) {
+                Text(text = "5")
+            }
+            OutlinedButton(
+                onClick = {value+="6"},
+                border = BorderStroke(0.5.dp, secondaryColor),
+                shape = RoundedCornerShape(15),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black,
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .weight(1f)
+            ) {
+                Text(text = "6")
+            }
+        }
+        Row(
+            modifier=Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        )
+        {
+            OutlinedButton(
+                onClick = {value+="7"},
+                border = BorderStroke(0.5.dp, secondaryColor),
+                shape = RoundedCornerShape(15),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black,
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .weight(1f)
+            ) {
+                Text(text = "7")
+            }
+            OutlinedButton(
+                onClick = {value+="8"},
+                border = BorderStroke(0.5.dp, secondaryColor),
+                shape = RoundedCornerShape(15),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black,
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .weight(1f)
+            ) {
+                Text(text = "8")
+            }
+            OutlinedButton(
+                onClick = {value+="9"},
+                border = BorderStroke(0.5.dp, secondaryColor),
+                shape = RoundedCornerShape(15),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black,
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .weight(1f)
+            ) {
+                Text(text = "9")
+            }
+        }
+        Row(
+            modifier=Modifier.fillMaxWidth().padding(bottom =30.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        )
+        {
+            OutlinedButton(
+                onClick = {value+="0"},
+                border = BorderStroke(0.5.dp, secondaryColor),
+                shape = RoundedCornerShape(15),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black,
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .weight(1f)
+            ) {
+                Text(text = "0")
+            }
+            OutlinedButton(
+                onClick = {value = value.dropLast(1)},
+                border = BorderStroke(0.5.dp, secondaryColor),
+                shape = RoundedCornerShape(15),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Black,
+                    containerColor = Color.White
+                ),
+                modifier = Modifier
+                    .padding(5.dp)
+                    .weight(1f)
+            ) {
+                Icon(contentDescription = null,
+                    painter = painterResource(id = R.drawable.back),
+                    tint = Color.Black,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+    }
+
+}
+
+
+@Preview
+@Composable
+fun PreviewHead()
+{
+ numberPad(onClick = {})
+}

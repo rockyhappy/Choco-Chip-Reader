@@ -72,6 +72,8 @@ fun scanScreen(navController: NavController) {
     var selectedIndex by remember { mutableStateOf(0) }
     var expanded by remember { mutableStateOf(false) }
     var markAttendanceEnabledButton by remember { mutableStateOf(true) }
+    var enterManually by remember { mutableStateOf(false) }
+    var showNumberPad by remember { mutableStateOf(false) }
 
 
 
@@ -125,10 +127,32 @@ fun scanScreen(navController: NavController) {
         markAttendanceEnabledButton = true
     }
 
+    /**
+     * This will manage the manual entry of the code
+     */
 
+    if(enterManually)
+    {
+        showNumberPad = true
+        enterManually = false
+    }
+    if(showNumberPad)
+    {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showNumberPad = false
+            },
+            sheetState = rememberModalBottomSheetState(),
+            modifier= Modifier
+                .wrapContentHeight(),
+            containerColor = Color.White
+        ) {
+            numberPad(onFlashClick)
+        }
+    }
 
     /**
-     * These will manage if the scan is success ful and the data is achieved then what to do
+     * These will manage if the scan is successful and the data is achieved then what to do
      */
     var scanSuccess = viewModel.scanSuccess.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState()
@@ -281,7 +305,7 @@ fun scanScreen(navController: NavController) {
                     ExtendedFloatingActionButton(
                         icon = { Icon(Icons.Filled.Person, contentDescription = null) },
                         text = { Text("Enter code Manually") },
-                        onClick = { /* do something */ },
+                        onClick = { enterManually = true },
                         containerColor = Color.White,
                     )
                 }
