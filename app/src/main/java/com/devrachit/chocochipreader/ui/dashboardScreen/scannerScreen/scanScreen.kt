@@ -31,6 +31,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -41,12 +44,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalTextInputService
@@ -54,14 +59,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.QrCodeAnalyzer
 import com.devrachit.chocochipreader.R
 import com.devrachit.chocochipreader.ui.theme.successColor
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3Api
 @Composable
@@ -141,7 +149,6 @@ fun scanScreen(navController: NavController) {
         enterManually = false
     }
     if (showNumberPad) {
-//        LocalTextInputService provides null
         ModalBottomSheet(
             onDismissRequest = {
                 showNumberPad = false
@@ -156,7 +163,6 @@ fun scanScreen(navController: NavController) {
     }
 
     var scanSuccess = viewModel.scanSuccess.collectAsStateWithLifecycle()
-
     var showBottomSheet by remember { mutableStateOf(false) }
     if (scanSuccess.value) {
         showBottomSheet = true
@@ -195,12 +201,54 @@ fun scanScreen(navController: NavController) {
         launcher.launch(Manifest.permission.CAMERA)
     }
 
-    val scanComplete= viewModel.scanComplete.collectAsStateWithLifecycle()
 
-    if(scanComplete.value) {
-        Toast.makeText(context, "Attendance ${code} marked", Toast.LENGTH_LONG).show()
-        viewModel.onScanComplete()
+    val scanComplete= viewModel.scanComplete.collectAsStateWithLifecycle()
+    var showFinalSheet by remember { mutableStateOf(false) }
+    LaunchedEffect(scanComplete.value) {
+        if (scanComplete.value) {
+            showFinalSheet = true
+            viewModel.onScanComplete()
+        }
     }
+    if(showFinalSheet){
+        ModalBottomSheet(
+            onDismissRequest = {
+                showFinalSheet = false
+            },
+            sheetState = sheetState,
+            modifier = Modifier
+                .wrapContentHeight(),
+            containerColor = Color.White
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Attendance Marked for ${code}",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = successColor,
+                    fontFamily = customFontFamily,
+                    textAlign = TextAlign.Center
+                )
+                TextButton(
+                    onClick = {
+                        showFinalSheet = false
+                    }
+                ) {
+                    Text(
+                        text = "Close",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {

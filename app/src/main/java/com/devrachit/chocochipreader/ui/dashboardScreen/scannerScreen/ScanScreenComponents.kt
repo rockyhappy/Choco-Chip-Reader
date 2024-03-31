@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.devrachit.chocochipreader.Constants.customFontFamily
@@ -89,7 +90,11 @@ fun CircularIconButton(
 }
 
 @Composable
-fun head(data: LiveData<DetailsResponse>, onClick: () -> Unit, enabled: Boolean) {
+fun head(
+    data: LiveData<DetailsResponse>,
+    onClick: () -> Unit,
+    enabled: Boolean
+) {
     Column(
         modifier = Modifier
             .padding(30.dp)
@@ -222,9 +227,9 @@ fun numberPad(onClick: (String) -> Unit  ){
     )
     {
         Row(
-            modifier=Modifier
+            modifier= Modifier
                 .fillMaxWidth()
-                .padding(top=20.dp, bottom =20.dp),
+                .padding(top = 20.dp, bottom = 20.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
 
@@ -417,7 +422,9 @@ fun numberPad(onClick: (String) -> Unit  ){
             }
         }
         Row(
-            modifier=Modifier.fillMaxWidth().padding(bottom =30.dp),
+            modifier= Modifier
+                .fillMaxWidth()
+                .padding(bottom = 30.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         )
@@ -474,19 +481,3 @@ fun showSuccessSnackBar(onClick: () -> Unit)
     }
 }
 
-
-
-//@Preview
-//@Composable
-//fun PreviewHead()
-//{
-//    val data = DetailsResponse("rachit", "rachit", "rachit", true)
-//    head(data = data, onClick = {}, enabled = true)
-//}
-@Preview
-@Composable
-fun PreviewHead() {
-    val data = remember { MutableLiveData<DetailsResponse>() }
-    data.value = DetailsResponse("rachit", "rachit", "rachit", true)
-    head(data = data, onClick = {}, enabled = true)
-}
