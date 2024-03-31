@@ -69,7 +69,7 @@ fun scanScreen(navController: NavController) {
     var context = LocalContext.current
     var isFlashOn by remember { mutableStateOf(false) }
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
-    val options = listOf("day 1", "day 2", "day 3", "day 4")
+    val options = listOf("day1", "day2", "day3", "day4")
     var selectedIndex by remember { mutableStateOf(0) }
     var expanded by remember { mutableStateOf(false) }
     var markAttendanceEnabledButton by remember { mutableStateOf(true) }
@@ -78,17 +78,21 @@ fun scanScreen(navController: NavController) {
 
 
     val markPresent: () -> Unit = {
-        viewModel.markPresent(options[selectedIndex])
+        viewModel.markPresent(
+            student_number = code,
+            day=options[selectedIndex]
+        )
     }
 
     val onFlashClick: () -> Unit = {
         isFlashOn = !isFlashOn
     }
 
-    val onManualEntry: (String) -> Unit = { code ->
-        if (code != null && code != "") {
+    val onManualEntry: (String) -> Unit = { scan ->
+        if (scan != null && scan != "") {
             showNumberPad = false
-            viewModel.onScanRecieved(code)
+            code=scan
+            viewModel.onScanRecieved(scan)
         }
     }
 

@@ -3,6 +3,8 @@ package com.devrachit.chocochipreader.network
 import com.devrachit.chocochipreader.Models.DetailsResponse
 import com.devrachit.chocochipreader.Models.LoginRequest
 import com.devrachit.chocochipreader.Models.LoginResponse
+import com.devrachit.chocochipreader.Models.MarkPresentRequest
+import com.devrachit.chocochipreader.Models.MarkPresentResponse
 import com.devrachit.chocochipreader.Models.finalAtendenceResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -16,7 +18,7 @@ interface ApiService {
 
     @POST("generateToken/")
     suspend fun login(
-       @Body request : LoginRequest
+        @Body request: LoginRequest
     ): Response<LoginResponse>
 
     @GET("attendance/details/{id}")
@@ -24,10 +26,8 @@ interface ApiService {
         @Path("id") id: String
     ): Response<DetailsResponse>
 
-    @POST("mark_present/{student_number}/{day}")
+    @POST("attendance/mark_present/")
     suspend fun markPresent(
-        @Path("student_number") student_number: Int,
-        @Path("day") day: String,
-        @Body body: Any = Object()
-    ): Response<finalAtendenceResponse>
+        @Body request: MarkPresentRequest
+    ): Response<MarkPresentResponse>
 }
