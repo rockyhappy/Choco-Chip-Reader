@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
@@ -36,7 +37,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.devrachit.chocochipreader.navigation.appNavHost
 import com.devrachit.chocochipreader.ui.theme.ChocoChipReaderTheme
+import com.devrachit.chocochipreader.ui.theme.primaryColor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,85 +49,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            window.statusBarColor = primaryColor.toArgb()
             ChocoChipReaderTheme {
+                val context = LocalContext.current
+                val navController: NavHostController = rememberNavController()
+                appNavHost(navHostController =navController)
 
-                val lifecycleOwner = LocalLifecycleOwner.current
-                var code by remember { mutableStateOf("") }
-                var context = LocalContext.current
-                val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
-                var hasCameraPermission by remember {
-                    mutableStateOf(
-                        ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.CAMERA
-                        ) == PackageManager.PERMISSION_GRANTED
-                    )
-                }
-                val launcher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.RequestPermission(),
-                    onResult = { isGranted ->
-                        hasCameraPermission = isGranted
-                    }
-                )
-                LaunchedEffect(key1 = true)
-                {
-                    launcher.launch(Manifest.permission.CAMERA)
-                }
-                Column(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    if (hasCameraPermission) {
 
-                        AndroidView(factory = { context ->
-                            val previewView = PreviewView(context)
-                            val preview = Preview.Builder().build()
-                            val selector = CameraSelector.Builder()
-                                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                                .build()
-                            preview.setSurfaceProvider(previewView.surfaceProvider)
-                            val imageAnalysis = ImageAnalysis.Builder()
-                                .setTargetResolution(
-                                    Size(
-                                        previewView.width,
-                                        previewView.height
-                                    )
-                                )
-                                .setBackpressureStrategy(
-                                    STRATEGY_KEEP_ONLY_LATEST
-                                )
-                                .build()
-                            imageAnalysis.setAnalyzer(
-                                ContextCompat.getMainExecutor(context),
-                                QrCodeAnalyzer {
-
-                                    code = it
-                                }
-                            )
-                            try {
-                                cameraProviderFuture.get().bindToLifecycle(
-                                    lifecycleOwner,
-                                    selector,
-                                    preview,
-                                    imageAnalysis
-                                )
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                            previewView
-                        },
-                            modifier = Modifier.weight(1f)
-                        )
-                        Text(
-                            text = "Scanned QR Code: $code",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                }
             }
         }
     }

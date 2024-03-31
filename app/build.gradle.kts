@@ -96,6 +96,8 @@ dependencies {
     implementation("androidx.wear.compose:compose-material:1.3.0")
     implementation("androidx.wear.compose:compose-navigation:1.3.0")
     implementation("androidx.wear.compose:compose-ui-tooling:1.3.0")
+    implementation ("com.google.android.material:material:1.5.0-alpha01")
+    implementation ("androidx.compose.material3:material3:1.0.0-alpha02")
 
     implementation ("androidx.datastore:datastore-preferences:1.0.0-alpha04")
     implementation ("androidx.datastore:datastore-core:1.0.0-alpha04")

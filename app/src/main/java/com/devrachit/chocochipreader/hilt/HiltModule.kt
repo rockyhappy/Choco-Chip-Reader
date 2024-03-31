@@ -18,6 +18,7 @@ import javax.inject.Singleton
 class HiltModule {
 
 //    @Singleton
+    @ViewModelScoped
     @Provides
     fun provideSharedViewModel(): SharedViewModel = SharedViewModel()
 
