@@ -30,4 +30,10 @@ interface ApiService {
     suspend fun markPresent(
         @Body request: MarkPresentRequest
     ): Response<MarkPresentResponse>
+
+    @GET("attendance/present_students/{day}")
+    suspend fun checkAttendance(
+        @Path("day") day: String
+    ): Response<List<DetailsResponse>>
+
 }

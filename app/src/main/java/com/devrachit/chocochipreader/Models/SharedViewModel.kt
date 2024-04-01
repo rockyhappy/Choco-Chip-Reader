@@ -16,7 +16,12 @@ class SharedViewModel @Inject constructor(
     private val _data= MutableLiveData<DetailsResponse>()
     var data: LiveData<DetailsResponse> = _data
 
+    private val _dataList= MutableLiveData<List<DetailsResponse>>()
+    var dataList: LiveData<List<DetailsResponse>> = _dataList
 
+    fun setDataList(dataList : List<DetailsResponse>){
+        _dataList.value = dataList
+    }
     fun setData(data : DetailsResponse){
         _data.value = data
     }
