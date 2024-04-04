@@ -13,16 +13,21 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -52,6 +57,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalTextInputService
@@ -69,6 +75,7 @@ import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.QrCodeAnalyzer
 import com.devrachit.chocochipreader.R
 import com.devrachit.chocochipreader.ui.theme.errorColor
+import com.devrachit.chocochipreader.ui.theme.primaryColor
 import com.devrachit.chocochipreader.ui.theme.successColor
 import kotlinx.coroutines.launch
 
@@ -126,22 +133,23 @@ fun scanScreen(navController: NavController) {
 
 
     val loading = viewModel.loading.collectAsStateWithLifecycle()
-//
-//    if (loading.value) {
-//
-//        Box(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .blur(15.dp),
-//            contentAlignment = Alignment.Center
-//        ) {
-//
-//        }
-////        markAttendanceEnabledButton = false
-//    }
-//    if (!loading.value) {
-//        markAttendanceEnabledButton = true
-//    }
+
+    if (loading.value) {
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .blur(15.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                color = Color.Black,
+                strokeWidth = 2.dp
+            )
+        }
+
+    }
+
 
 
 
@@ -277,6 +285,44 @@ fun scanScreen(navController: NavController) {
         viewModel.onError()
     }
 
+    if(loading.value)
+    {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White.copy(alpha = 0.5f))
+                .pointerInput(Unit) {
+                    this.detectTapGestures {}
+                },
+            contentAlignment = Alignment.Center
+        )
+        {
+            ModalBottomSheet(
+                onDismissRequest = { },
+                sheetState = sheetState,
+                modifier = Modifier
+                    .height(150.dp),
+                containerColor = Color.White,
+
+                ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                )
+                {
+                    CircularProgressIndicator(
+                        color = primaryColor,
+                        strokeWidth = 2.dp
+                    )
+                }
+
+            }
+        }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -403,5 +449,4 @@ fun scanScreen(navController: NavController) {
             }
         }
     }
-
 }
