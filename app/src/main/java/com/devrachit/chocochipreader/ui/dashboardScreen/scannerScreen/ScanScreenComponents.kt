@@ -48,6 +48,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -59,7 +61,7 @@ import com.devrachit.chocochipreader.ui.theme.grayShade1
 import com.devrachit.chocochipreader.ui.theme.primaryColor
 import com.devrachit.chocochipreader.ui.theme.secondaryColor
 import com.devrachit.chocochipreader.ui.theme.successColor
-import com.google.android.material.progressindicator.CircularProgressIndicator
+import androidx.compose.material3.CircularProgressIndicator
 
 
 @Composable
@@ -546,3 +548,38 @@ fun showSuccessSnackBar(onClick: () -> Unit)
 //        )
 //    }
 //}
+
+@Composable
+fun LoadingDialog(isShowingDialog: Boolean, dismissOnBackPress: Boolean = false, dismissOnClickOutside: Boolean = false) {
+    if (isShowingDialog) {
+        Dialog(
+            onDismissRequest = { },
+            DialogProperties(
+                dismissOnBackPress = dismissOnBackPress,
+                dismissOnClickOutside = dismissOnClickOutside
+            )
+        ) {
+            DialogContent()
+        }
+    }
+}
+
+@Composable
+fun DialogContent() {
+    Box(
+        modifier = Modifier
+            .size(76.dp)
+            .background(
+                color = Color.Transparent,
+                shape = RoundedCornerShape(4.dp)
+            )
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .size(48.dp)
+                .align(Alignment.Center)
+                ,
+            color = primaryColor
+        )
+    }
+}

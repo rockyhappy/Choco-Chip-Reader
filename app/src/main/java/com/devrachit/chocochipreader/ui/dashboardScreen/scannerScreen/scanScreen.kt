@@ -136,17 +136,7 @@ fun scanScreen(navController: NavController) {
 
     if (loading.value) {
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .blur(15.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(
-                color = Color.Black,
-                strokeWidth = 2.dp
-            )
-        }
+        LoadingDialog(isShowingDialog = loading.value)
 
     }
 
@@ -285,43 +275,43 @@ fun scanScreen(navController: NavController) {
         viewModel.onError()
     }
 
-    if(loading.value)
-    {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White.copy(alpha = 0.5f))
-                .pointerInput(Unit) {
-                    this.detectTapGestures {}
-                },
-            contentAlignment = Alignment.Center
-        )
-        {
-            ModalBottomSheet(
-                onDismissRequest = { },
-                sheetState = sheetState,
-                modifier = Modifier
-                    .height(150.dp),
-                containerColor = Color.White,
-
-                ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                )
-                {
-                    CircularProgressIndicator(
-                        color = primaryColor,
-                        strokeWidth = 2.dp
-                    )
-                }
-
-            }
-        }
-    }
+//    if(loading.value)
+//    {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(Color.White.copy(alpha = 0.5f))
+//                .pointerInput(Unit) {
+//                    this.detectTapGestures {}
+//                },
+//            contentAlignment = Alignment.Center
+//        )
+//        {
+//            ModalBottomSheet(
+//                onDismissRequest = { },
+//                sheetState = sheetState,
+//                modifier = Modifier
+//                    .height(150.dp),
+//                containerColor = Color.White,
+//
+//                ) {
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(20.dp),
+//                    horizontalArrangement = Arrangement.Center,
+//                    verticalAlignment = Alignment.CenterVertically
+//                )
+//                {
+//                    CircularProgressIndicator(
+//                        color = primaryColor,
+//                        strokeWidth = 2.dp
+//                    )
+//                }
+//
+//            }
+//        }
+//    }
 
     Column(
         modifier = Modifier.fillMaxSize()
