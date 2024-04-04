@@ -36,4 +36,9 @@ interface ApiService {
         @Path("day") day: String
     ): Response<List<DetailsResponse>>
 
+    @POST("attendance/unmark_present/")
+    suspend fun unmarkPresent(
+        @Body request: MarkPresentRequest
+    ): Response<MarkPresentResponse>
+
 }

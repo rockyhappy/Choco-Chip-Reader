@@ -13,7 +13,7 @@ class SharedViewModel @Inject constructor(
     private var token : String = ""
     private var errorMessage : String = ""
 
-    private val _data= MutableLiveData<DetailsResponse>()
+    private var _data= MutableLiveData<DetailsResponse>()
     var data: LiveData<DetailsResponse> = _data
 
     private val _dataList= MutableLiveData<List<DetailsResponse>>()
@@ -25,7 +25,6 @@ class SharedViewModel @Inject constructor(
     fun setData(data : DetailsResponse){
         _data.value = data
     }
-
     fun setToken(token : String){
         this.token = token
     }

@@ -68,6 +68,7 @@ import androidx.navigation.NavController
 import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.QrCodeAnalyzer
 import com.devrachit.chocochipreader.R
+import com.devrachit.chocochipreader.ui.theme.errorColor
 import com.devrachit.chocochipreader.ui.theme.successColor
 import kotlinx.coroutines.launch
 
@@ -89,7 +90,6 @@ fun scanScreen(navController: NavController) {
     var showNumberPad by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
     var barcodeAnalysisEnabled by remember { mutableStateOf(true) }
-
 
 
 
@@ -126,32 +126,36 @@ fun scanScreen(navController: NavController) {
 
 
     val loading = viewModel.loading.collectAsStateWithLifecycle()
-
-    if (loading.value) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .blur(15.dp),
-            contentAlignment = Alignment.Center
-        ) {
-        }
-        markAttendanceEnabledButton = false
-    }
-    if (!loading.value) {
-        markAttendanceEnabledButton = true
-    }
+//
+//    if (loading.value) {
+//
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .blur(15.dp),
+//            contentAlignment = Alignment.Center
+//        ) {
+//
+//        }
+////        markAttendanceEnabledButton = false
+//    }
+//    if (!loading.value) {
+//        markAttendanceEnabledButton = true
+//    }
 
 
 
     if (enterManually) {
         showNumberPad = true
         enterManually = false
+        barcodeAnalysisEnabled = false
     }
+
     if (showNumberPad) {
         ModalBottomSheet(
             onDismissRequest = {
                 showNumberPad = false
+                barcodeAnalysisEnabled = true
             },
             sheetState = sheetState,
             modifier = Modifier
@@ -166,6 +170,7 @@ fun scanScreen(navController: NavController) {
     var showBottomSheet by remember { mutableStateOf(false) }
     if (scanSuccess.value) {
         showBottomSheet = true
+        barcodeAnalysisEnabled = false
         viewModel.onScanSuccess()
     }
     val markPresent: () -> Unit = {
@@ -175,10 +180,18 @@ fun scanScreen(navController: NavController) {
             day=options[selectedIndex]
         )
     }
+    val unmarkPresent: () -> Unit = {
+        showBottomSheet = false
+        viewModel.unmarkPresent(
+            student_number = code,
+            day=options[selectedIndex]
+        )
+    }
     if (showBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = {
                 showBottomSheet = false
+                barcodeAnalysisEnabled = true
             },
             sheetState = sheetState,
             modifier = Modifier
@@ -186,7 +199,7 @@ fun scanScreen(navController: NavController) {
             containerColor = Color.White
         ) {
             val data = viewModel.sharedViewModel.data
-            head(data = data, markPresent, markAttendanceEnabledButton)
+            head(data = data,  markPresent, unmarkPresent, markAttendanceEnabledButton)
 
         }
     }
@@ -204,9 +217,11 @@ fun scanScreen(navController: NavController) {
 
     val scanComplete= viewModel.scanComplete.collectAsStateWithLifecycle()
     var showFinalSheet by remember { mutableStateOf(false) }
+    val lastApiCall= viewModel.lastApiCall.collectAsStateWithLifecycle()
     LaunchedEffect(scanComplete.value) {
         if (scanComplete.value) {
             showFinalSheet = true
+            barcodeAnalysisEnabled = true
             viewModel.onScanComplete()
         }
     }
@@ -214,6 +229,7 @@ fun scanScreen(navController: NavController) {
         ModalBottomSheet(
             onDismissRequest = {
                 showFinalSheet = false
+                barcodeAnalysisEnabled = true
             },
             sheetState = sheetState,
             modifier = Modifier
@@ -227,10 +243,14 @@ fun scanScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Attendance Marked for ${code}",
+                    text =
+                    if(lastApiCall.value==1) "Attendance Marked for ${code}"
+                    else "Attendance Unmarked for ${code}",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = successColor,
+                    color =
+                    if(lastApiCall.value==1)successColor
+                    else errorColor,
                     fontFamily = customFontFamily,
                     textAlign = TextAlign.Center
                 )
@@ -247,6 +267,14 @@ fun scanScreen(navController: NavController) {
                 }
             }
         }
+    }
+
+    val error = viewModel.error.collectAsStateWithLifecycle()
+    val errorMessage = viewModel.errorMessage.collectAsStateWithLifecycle()
+    if(error.value)
+    {
+        Toast.makeText(context, errorMessage.value, Toast.LENGTH_SHORT).show()
+        viewModel.onError()
     }
 
     Column(
@@ -281,6 +309,7 @@ fun scanScreen(navController: NavController) {
                                     code = scannedCode
                                     viewModel.onScanRecieved(scannedCode)
                                 }
+
                             }
                         )
                         try {

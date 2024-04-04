@@ -50,6 +50,7 @@ import androidx.lifecycle.MutableLiveData
 import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.Models.DetailsResponse
 import com.devrachit.chocochipreader.R
+import com.devrachit.chocochipreader.ui.theme.errorColor
 import com.devrachit.chocochipreader.ui.theme.grayShade1
 import com.devrachit.chocochipreader.ui.theme.primaryColor
 import com.devrachit.chocochipreader.ui.theme.secondaryColor
@@ -92,7 +93,8 @@ fun CircularIconButton(
 @Composable
 fun head(
     data: LiveData<DetailsResponse>,
-    onClick: () -> Unit,
+    markpresent: () -> Unit,
+    unmarkPresent: () -> Unit,
     enabled: Boolean
 ) {
     Column(
@@ -173,7 +175,7 @@ fun head(
                 color = Color.Black
             )
             Text(
-                text = data.value?.is_hosteler.toString(),
+                text =if( data.value?.is_hosteler.toString().toBoolean()) "Yes" else "No",
                 fontSize = 20.sp,
                 fontFamily = customFontFamily,
 //                fontWeight = Bold,
@@ -193,7 +195,11 @@ fun head(
         )
         {
             Button(
-                onClick = {onClick()},
+                onClick = {
+                    if(data.value?.is_present.toString().toBoolean())
+                        unmarkPresent()
+                    else
+                        markpresent()},
                 enabled = enabled,
                 modifier = Modifier
                     .width(100.dp)
@@ -202,10 +208,15 @@ fun head(
                 shape = RoundedCornerShape(16.dp,16.dp,16.dp,16.dp),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.White,
-                    containerColor = primaryColor
+                    containerColor =
+                    if(data.value?.is_present.toString().toBoolean()) errorColor
+                    else primaryColor
                 )
             ) {
-                Text(text = "Mark Attendance",
+                Text(
+                    text =
+                    if(data.value?.is_present.toString().toBoolean())"Mark Absent"
+                    else "Mark Present",
                     color = Color.White,
                     fontSize = 15.sp,
                     fontFamily = customFontFamily,

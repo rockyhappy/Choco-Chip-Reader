@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.toArgb
@@ -50,7 +51,7 @@ import androidx.lifecycle.lifecycleScope
 import com.devrachit.chocochipreader.ui.theme.primaryColor
 import kotlinx.coroutines.launch
 
-
+@ExperimentalMaterial3Api
 @AndroidEntryPoint
 class SplashScreen : ComponentActivity()  {
     private lateinit var dataStore: DataStore<Preferences>

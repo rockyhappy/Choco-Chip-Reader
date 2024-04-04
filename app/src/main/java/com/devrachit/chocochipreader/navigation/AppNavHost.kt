@@ -12,7 +12,7 @@ import com.devrachit.chocochipreader.ui.dashboardScreen.scannerScreen.scanScreen
 fun appNavHost(navHostController: NavHostController) {
     NavHost(
         navController = navHostController,
-        startDestination = AppScreens.ListScreen.route
+        startDestination = AppScreens.ScannerScreen.route
     )
     {
         composable(AppScreens.ScannerScreen.route){
