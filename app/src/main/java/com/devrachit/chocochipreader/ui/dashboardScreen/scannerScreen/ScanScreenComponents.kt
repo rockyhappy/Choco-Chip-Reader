@@ -4,10 +4,12 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -36,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
@@ -44,16 +48,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.Models.DetailsResponse
 import com.devrachit.chocochipreader.R
+import com.devrachit.chocochipreader.ui.theme.errorColor
 import com.devrachit.chocochipreader.ui.theme.grayShade1
 import com.devrachit.chocochipreader.ui.theme.primaryColor
 import com.devrachit.chocochipreader.ui.theme.secondaryColor
 import com.devrachit.chocochipreader.ui.theme.successColor
+import androidx.compose.material3.CircularProgressIndicator
 
 
 @Composable
@@ -92,7 +100,8 @@ fun CircularIconButton(
 @Composable
 fun head(
     data: LiveData<DetailsResponse>,
-    onClick: () -> Unit,
+    markpresent: () -> Unit,
+    unmarkPresent: () -> Unit,
     enabled: Boolean
 ) {
     Column(
@@ -173,7 +182,7 @@ fun head(
                 color = Color.Black
             )
             Text(
-                text = data.value?.is_hosteler.toString(),
+                text =if( data.value?.is_hosteler.toString().toBoolean()) "Yes" else "No",
                 fontSize = 20.sp,
                 fontFamily = customFontFamily,
 //                fontWeight = Bold,
@@ -193,7 +202,11 @@ fun head(
         )
         {
             Button(
-                onClick = {onClick()},
+                onClick = {
+                    if(data.value?.is_present.toString().toBoolean())
+                        unmarkPresent()
+                    else
+                        markpresent()},
                 enabled = enabled,
                 modifier = Modifier
                     .width(100.dp)
@@ -202,10 +215,15 @@ fun head(
                 shape = RoundedCornerShape(16.dp,16.dp,16.dp,16.dp),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.White,
-                    containerColor = primaryColor
+                    containerColor =
+                    if(data.value?.is_present.toString().toBoolean()) errorColor
+                    else primaryColor
                 )
             ) {
-                Text(text = "Mark Attendance",
+                Text(
+                    text =
+                    if(data.value?.is_present.toString().toBoolean())"Mark Absent"
+                    else "Mark Present",
                     color = Color.White,
                     fontSize = 15.sp,
                     fontFamily = customFontFamily,
@@ -481,3 +499,87 @@ fun showSuccessSnackBar(onClick: () -> Unit)
     }
 }
 
+//@Composable
+//fun ModalBottomSheetNoDismiss(
+//    modifier: Modifier = Modifier,
+//    onDismissRequest: () -> Unit,
+//    content: @Composable () -> Unit
+//) {
+//    Box(
+//        modifier = modifier
+//            .pointerInput(Unit) {
+//                detectTapGestures(
+//                    onPress = { /* Do nothing */ },
+//                    onTap = { /* Do nothing */ }
+//                )
+//            },
+//    )
+//    {
+//        content()
+//    }
+//}
+//@Composable
+//fun LoadingDialog(
+//    isVisible: Boolean,
+//    onDismiss: () -> Unit
+//) {
+//    if (isVisible) {
+//        AlertDialog(
+//            onDismissRequest = onDismiss,
+//            title = {
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(20.dp),
+//                    horizontalArrangement = Arrangement.Center,
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    CircularProgressIndicator(
+//                        color = primaryColor,
+//                        strokeWidth = 2.dp
+//                    )
+////                    Spacer(modifier = Modifier.width(16.dp))
+////                    Text(text = "Loading")
+//                }
+//            },
+//            confirmButton = {
+//                // Empty confirm button, you can customize as needed
+//            }
+//        )
+//    }
+//}
+
+@Composable
+fun LoadingDialog(isShowingDialog: Boolean, dismissOnBackPress: Boolean = false, dismissOnClickOutside: Boolean = false) {
+    if (isShowingDialog) {
+        Dialog(
+            onDismissRequest = { },
+            DialogProperties(
+                dismissOnBackPress = dismissOnBackPress,
+                dismissOnClickOutside = dismissOnClickOutside
+            )
+        ) {
+            DialogContent()
+        }
+    }
+}
+
+@Composable
+fun DialogContent() {
+    Box(
+        modifier = Modifier
+            .size(76.dp)
+            .background(
+                color = Color.Transparent,
+                shape = RoundedCornerShape(4.dp)
+            )
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .size(48.dp)
+                .align(Alignment.Center)
+                ,
+            color = primaryColor
+        )
+    }
+}

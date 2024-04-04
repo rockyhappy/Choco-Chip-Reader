@@ -13,16 +13,21 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -52,6 +57,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalTextInputService
@@ -68,6 +74,8 @@ import androidx.navigation.NavController
 import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.QrCodeAnalyzer
 import com.devrachit.chocochipreader.R
+import com.devrachit.chocochipreader.ui.theme.errorColor
+import com.devrachit.chocochipreader.ui.theme.primaryColor
 import com.devrachit.chocochipreader.ui.theme.successColor
 import kotlinx.coroutines.launch
 
@@ -89,7 +97,6 @@ fun scanScreen(navController: NavController) {
     var showNumberPad by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
     var barcodeAnalysisEnabled by remember { mutableStateOf(true) }
-
 
 
 
@@ -129,29 +136,24 @@ fun scanScreen(navController: NavController) {
 
     if (loading.value) {
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .blur(15.dp),
-            contentAlignment = Alignment.Center
-        ) {
-        }
-        markAttendanceEnabledButton = false
+        LoadingDialog(isShowingDialog = loading.value)
+
     }
-    if (!loading.value) {
-        markAttendanceEnabledButton = true
-    }
+
 
 
 
     if (enterManually) {
         showNumberPad = true
         enterManually = false
+        barcodeAnalysisEnabled = false
     }
+
     if (showNumberPad) {
         ModalBottomSheet(
             onDismissRequest = {
                 showNumberPad = false
+                barcodeAnalysisEnabled = true
             },
             sheetState = sheetState,
             modifier = Modifier
@@ -166,6 +168,7 @@ fun scanScreen(navController: NavController) {
     var showBottomSheet by remember { mutableStateOf(false) }
     if (scanSuccess.value) {
         showBottomSheet = true
+        barcodeAnalysisEnabled = false
         viewModel.onScanSuccess()
     }
     val markPresent: () -> Unit = {
@@ -175,10 +178,18 @@ fun scanScreen(navController: NavController) {
             day=options[selectedIndex]
         )
     }
+    val unmarkPresent: () -> Unit = {
+        showBottomSheet = false
+        viewModel.unmarkPresent(
+            student_number = code,
+            day=options[selectedIndex]
+        )
+    }
     if (showBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = {
                 showBottomSheet = false
+                barcodeAnalysisEnabled = true
             },
             sheetState = sheetState,
             modifier = Modifier
@@ -186,7 +197,7 @@ fun scanScreen(navController: NavController) {
             containerColor = Color.White
         ) {
             val data = viewModel.sharedViewModel.data
-            head(data = data, markPresent, markAttendanceEnabledButton)
+            head(data = data,  markPresent, unmarkPresent, markAttendanceEnabledButton)
 
         }
     }
@@ -204,9 +215,11 @@ fun scanScreen(navController: NavController) {
 
     val scanComplete= viewModel.scanComplete.collectAsStateWithLifecycle()
     var showFinalSheet by remember { mutableStateOf(false) }
+    val lastApiCall= viewModel.lastApiCall.collectAsStateWithLifecycle()
     LaunchedEffect(scanComplete.value) {
         if (scanComplete.value) {
             showFinalSheet = true
+            barcodeAnalysisEnabled = true
             viewModel.onScanComplete()
         }
     }
@@ -214,6 +227,7 @@ fun scanScreen(navController: NavController) {
         ModalBottomSheet(
             onDismissRequest = {
                 showFinalSheet = false
+                barcodeAnalysisEnabled = true
             },
             sheetState = sheetState,
             modifier = Modifier
@@ -227,10 +241,14 @@ fun scanScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Attendance Marked for ${code}",
+                    text =
+                    if(lastApiCall.value==1) "Attendance Marked for ${code}"
+                    else "Attendance Unmarked for ${code}",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = successColor,
+                    color =
+                    if(lastApiCall.value==1)successColor
+                    else errorColor,
                     fontFamily = customFontFamily,
                     textAlign = TextAlign.Center
                 )
@@ -248,6 +266,52 @@ fun scanScreen(navController: NavController) {
             }
         }
     }
+
+    val error = viewModel.error.collectAsStateWithLifecycle()
+    val errorMessage = viewModel.errorMessage.collectAsStateWithLifecycle()
+    if(error.value)
+    {
+        Toast.makeText(context, errorMessage.value, Toast.LENGTH_SHORT).show()
+        viewModel.onError()
+    }
+
+//    if(loading.value)
+//    {
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(Color.White.copy(alpha = 0.5f))
+//                .pointerInput(Unit) {
+//                    this.detectTapGestures {}
+//                },
+//            contentAlignment = Alignment.Center
+//        )
+//        {
+//            ModalBottomSheet(
+//                onDismissRequest = { },
+//                sheetState = sheetState,
+//                modifier = Modifier
+//                    .height(150.dp),
+//                containerColor = Color.White,
+//
+//                ) {
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(20.dp),
+//                    horizontalArrangement = Arrangement.Center,
+//                    verticalAlignment = Alignment.CenterVertically
+//                )
+//                {
+//                    CircularProgressIndicator(
+//                        color = primaryColor,
+//                        strokeWidth = 2.dp
+//                    )
+//                }
+//
+//            }
+//        }
+//    }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -281,6 +345,7 @@ fun scanScreen(navController: NavController) {
                                     code = scannedCode
                                     viewModel.onScanRecieved(scannedCode)
                                 }
+
                             }
                         )
                         try {
@@ -374,5 +439,4 @@ fun scanScreen(navController: NavController) {
             }
         }
     }
-
 }

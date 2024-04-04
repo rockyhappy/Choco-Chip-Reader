@@ -30,11 +30,23 @@ class ScanScreenViewModel @Inject constructor(
     var _scanSuccess = MutableStateFlow(false)
     var scanSuccess = _scanSuccess.asStateFlow()
 
+    private val _errorMessage = MutableStateFlow("")
+    val errorMessage = _errorMessage.asStateFlow()
+
+    private val _error = MutableStateFlow(false)
+    val error = _error.asStateFlow()
+
+    private val _lastApiCall = MutableStateFlow(0)
+    val lastApiCall = _lastApiCall.asStateFlow()
+
     fun onScanComplete() {
         _scanComplete.value = false
     }
     fun onScanSuccess() {
         _scanSuccess.value = false
+    }
+    fun onError() {
+        _error.value = false
     }
     fun onScanRecieved(barcodeInfo: String) {
 
@@ -50,7 +62,12 @@ class ScanScreenViewModel @Inject constructor(
                         sharedViewModel.setData(data)
                         Log.d("data", data.toString())
                         _scanSuccess.value = true
+
                     }
+                }
+                else{
+                    _error.value = true
+                    _errorMessage.value = response.errorBody().toString()
                 }
 
                 _loading.value = false
@@ -67,7 +84,6 @@ class ScanScreenViewModel @Inject constructor(
                 val request = MarkPresentRequest(
                     student_number=student_number,
                     day=day,
-//                    "22153019","day1"
                 )
                 _loading.value = true
                 val response = RetrofitInstance2
@@ -77,6 +93,43 @@ class ScanScreenViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     Log.d("markPresent", "success")
                     _scanComplete.value = true
+                    _lastApiCall.value = 1
+                }
+                else
+                {
+                    _error.value = true
+                    _errorMessage.value = response.errorBody().toString()
+                }
+
+                _loading.value = false
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+    fun unmarkPresent(student_number: String, day: String) {
+        Log.d("markPresent", "called")
+        viewModelScope.launch {
+            try {
+                val request = MarkPresentRequest(
+                    student_number=student_number,
+                    day=day,
+                )
+                _loading.value = true
+                val response = RetrofitInstance2
+                    .getApiServiceWithToken(dataStore)
+                    .unmarkPresent(request)
+                Log.d("unmarkPresent", response.toString())
+                if (response.isSuccessful) {
+                    Log.d("unmarkPresent", "success")
+                    _scanComplete.value = true
+                    _lastApiCall.value = 2
+                }
+                else
+                {
+                    _error.value = true
+                    _errorMessage.value = response.errorBody().toString()
+                    Log.d("unmarkPresent", response.errorBody().toString())
                 }
 
                 _loading.value = false
