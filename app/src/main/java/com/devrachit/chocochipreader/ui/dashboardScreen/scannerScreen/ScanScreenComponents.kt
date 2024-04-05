@@ -499,56 +499,6 @@ fun showSuccessSnackBar(onClick: () -> Unit)
     }
 }
 
-//@Composable
-//fun ModalBottomSheetNoDismiss(
-//    modifier: Modifier = Modifier,
-//    onDismissRequest: () -> Unit,
-//    content: @Composable () -> Unit
-//) {
-//    Box(
-//        modifier = modifier
-//            .pointerInput(Unit) {
-//                detectTapGestures(
-//                    onPress = { /* Do nothing */ },
-//                    onTap = { /* Do nothing */ }
-//                )
-//            },
-//    )
-//    {
-//        content()
-//    }
-//}
-//@Composable
-//fun LoadingDialog(
-//    isVisible: Boolean,
-//    onDismiss: () -> Unit
-//) {
-//    if (isVisible) {
-//        AlertDialog(
-//            onDismissRequest = onDismiss,
-//            title = {
-//                Row(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(20.dp),
-//                    horizontalArrangement = Arrangement.Center,
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    CircularProgressIndicator(
-//                        color = primaryColor,
-//                        strokeWidth = 2.dp
-//                    )
-////                    Spacer(modifier = Modifier.width(16.dp))
-////                    Text(text = "Loading")
-//                }
-//            },
-//            confirmButton = {
-//                // Empty confirm button, you can customize as needed
-//            }
-//        )
-//    }
-//}
-
 @Composable
 fun LoadingDialog(isShowingDialog: Boolean, dismissOnBackPress: Boolean = false, dismissOnClickOutside: Boolean = false) {
     if (isShowingDialog) {

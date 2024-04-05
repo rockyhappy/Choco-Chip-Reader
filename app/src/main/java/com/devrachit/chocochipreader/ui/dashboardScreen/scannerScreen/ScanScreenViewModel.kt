@@ -62,7 +62,6 @@ class ScanScreenViewModel @Inject constructor(
                         sharedViewModel.setData(data)
                         Log.d("data", data.toString())
                         _scanSuccess.value = true
-
                     }
                 }
                 else{
@@ -82,7 +81,7 @@ class ScanScreenViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val request = MarkPresentRequest(
-                    student_number=student_number,
+                    student_number=sharedViewModel.data.value!!.student_number,
                     day=day,
                 )
                 _loading.value = true
@@ -112,7 +111,7 @@ class ScanScreenViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val request = MarkPresentRequest(
-                    student_number=student_number,
+                    student_number=sharedViewModel.data.value!!.student_number,
                     day=day,
                 )
                 _loading.value = true
@@ -128,7 +127,9 @@ class ScanScreenViewModel @Inject constructor(
                 else
                 {
                     _error.value = true
-                    _errorMessage.value = response.errorBody().toString()
+                    _errorMessage.value =
+                        if(response.code()==404) "Student not found"
+                    else response.errorBody().toString()
                     Log.d("unmarkPresent", response.errorBody().toString())
                 }
 
