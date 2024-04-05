@@ -305,7 +305,13 @@ fun scanScreen(navController: NavController) {
                         imageAnalysis.setAnalyzer(
                             ContextCompat.getMainExecutor(context),
                             QrCodeAnalyzer { scannedCode ->
-                                if (barcodeAnalysisEnabled && code != scannedCode) {
+                                if (
+                                    barcodeAnalysisEnabled &&
+                                    code != scannedCode &&
+                                    scannedCode[0]=='2' &&
+                                    ( scannedCode[1]=='1'||scannedCode[1]=='2'||scannedCode[1]=='3')
+                                    )
+                                    {
                                     code = scannedCode
                                     viewModel.onScanRecieved(scannedCode)
                                 }

@@ -65,8 +65,11 @@ class ScanScreenViewModel @Inject constructor(
                     }
                 }
                 else{
+                    when(response.code()){
+                        404 -> _errorMessage.value = "No Student matches the given query"
+                        else -> _errorMessage.value = response.errorBody().toString()
+                    }
                     _error.value = true
-                    _errorMessage.value = response.errorBody().toString()
                 }
 
                 _loading.value = false
