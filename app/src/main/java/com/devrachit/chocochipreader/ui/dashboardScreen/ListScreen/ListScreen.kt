@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.devrachit.chocochipreader.ui.dashboardScreen.scannerScreen.LoadingDialog
+
 @ExperimentalMaterial3Api
 @Composable
 fun ListScreen(navController: NavController) {
@@ -44,11 +46,16 @@ fun ListScreen(navController: NavController) {
             1 -> {
                 if (loading.value) {
                     items(1) {
-                        Text(text = "Loading...")
+                        LoadingDialog(isShowingDialog =loading.value)
                     }
                 } else if(apiCallMade.value) {
                     items(viewModel.sharedViewModel.dataList.value!!.size) {
-                        Text(text = viewModel.sharedViewModel.dataList.value!![it].name)
+                        listItem(
+                            name = viewModel.sharedViewModel.dataList.value!![it].name,
+                            is_hosteler = viewModel.sharedViewModel.dataList.value!![it].is_hosteler,
+                            branch =viewModel.sharedViewModel.dataList.value!![it].branch,
+                            student_number = viewModel.sharedViewModel.dataList.value!![it].student_number.toString()
+                        )
                     }
                 }
             }
@@ -56,11 +63,17 @@ fun ListScreen(navController: NavController) {
             2 -> {
                 if (loading.value) {
                     items(1) {
-                        Text(text = "Loading...")
+                        LoadingDialog(isShowingDialog =loading.value)
                     }
                 } else if(apiCallMade.value) {
                     items(viewModel.sharedViewModel.dataList.value!!.size) {
-                        Text(text = viewModel.sharedViewModel.dataList.value!![it].name)
+                        listItem(
+                            name = viewModel.sharedViewModel.dataList.value!![it].name,
+                            is_hosteler = viewModel.sharedViewModel.dataList.value!![it].is_hosteler,
+                            branch =viewModel.sharedViewModel.dataList.value!![it].branch,
+                            student_number = viewModel.sharedViewModel.dataList.value!![it].student_number.toString()
+                        )
+
                     }
                 }
             }
@@ -68,11 +81,16 @@ fun ListScreen(navController: NavController) {
             3 -> {
                 if (loading.value) {
                     items(1) {
-                        Text(text = "Loading...")
+                        LoadingDialog(isShowingDialog =loading.value)
                     }
                 } else if(apiCallMade.value) {
                     items(viewModel.sharedViewModel.dataList.value!!.size) {
-                        Text(text = viewModel.sharedViewModel.dataList.value!![it].name)
+                        listItem(
+                            name = viewModel.sharedViewModel.dataList.value!![it].name,
+                            is_hosteler = viewModel.sharedViewModel.dataList.value!![it].is_hosteler,
+                            branch =viewModel.sharedViewModel.dataList.value!![it].branch,
+                            student_number = viewModel.sharedViewModel.dataList.value!![it].student_number.toString()
+                        )
                     }
                 }
             }
@@ -80,11 +98,16 @@ fun ListScreen(navController: NavController) {
             4 -> {
                 if (loading.value) {
                     items(1) {
-                        Text(text = "Loading...")
+                        LoadingDialog(isShowingDialog =loading.value)
                     }
                 } else if(apiCallMade.value) {
                     items(viewModel.sharedViewModel.dataList.value!!.size) {
-                        Text(text = viewModel.sharedViewModel.dataList.value!![it].name)
+                        listItem(
+                            name = viewModel.sharedViewModel.dataList.value!![it].name,
+                            is_hosteler = viewModel.sharedViewModel.dataList.value!![it].is_hosteler,
+                            branch =viewModel.sharedViewModel.dataList.value!![it].branch,
+                            student_number = viewModel.sharedViewModel.dataList.value!![it].student_number.toString()
+                        )
                     }
                 }
             }

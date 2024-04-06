@@ -62,12 +62,14 @@ class ScanScreenViewModel @Inject constructor(
                         sharedViewModel.setData(data)
                         Log.d("data", data.toString())
                         _scanSuccess.value = true
-
                     }
                 }
                 else{
+                    when(response.code()){
+                        404 -> _errorMessage.value = "No Student matches the given query"
+                        else -> _errorMessage.value = response.errorBody().toString()
+                    }
                     _error.value = true
-                    _errorMessage.value = response.errorBody().toString()
                 }
 
                 _loading.value = false
@@ -77,12 +79,12 @@ class ScanScreenViewModel @Inject constructor(
         }
     }
 
-    fun markPresent(student_number: String, day: String) {
+    fun markPresent( day: String) {
         Log.d("markPresent", "called")
         viewModelScope.launch {
             try {
                 val request = MarkPresentRequest(
-                    student_number=student_number,
+                    student_number=sharedViewModel.data.value!!.student_number,
                     day=day,
                 )
                 _loading.value = true
@@ -97,8 +99,13 @@ class ScanScreenViewModel @Inject constructor(
                 }
                 else
                 {
+                    when(response.code()){
+                        404 -> _errorMessage.value = "No Student matches the given query"
+                        400-> _errorMessage.value = "Day is not active "
+                        else -> _errorMessage.value = response.errorBody().toString()
+                    }
                     _error.value = true
-                    _errorMessage.value = response.errorBody().toString()
+                    //_errorMessage.value = response.errorBody().toString()
                 }
 
                 _loading.value = false
@@ -107,12 +114,12 @@ class ScanScreenViewModel @Inject constructor(
             }
         }
     }
-    fun unmarkPresent(student_number: String, day: String) {
+    fun unmarkPresent( day: String) {
         Log.d("markPresent", "called")
         viewModelScope.launch {
             try {
                 val request = MarkPresentRequest(
-                    student_number=student_number,
+                    student_number=sharedViewModel.data.value!!.student_number,
                     day=day,
                 )
                 _loading.value = true
@@ -127,9 +134,13 @@ class ScanScreenViewModel @Inject constructor(
                 }
                 else
                 {
+                    when(response.code()){
+                        404 -> _errorMessage.value = "No Student matches the given query"
+                        400-> _errorMessage.value = "Day is not active "
+                        else -> _errorMessage.value = response.errorBody().toString()
+                    }
                     _error.value = true
-                    _errorMessage.value = response.errorBody().toString()
-                    Log.d("unmarkPresent", response.errorBody().toString())
+                    //_errorMessage.value = response.errorBody().toString()
                 }
 
                 _loading.value = false

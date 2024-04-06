@@ -277,7 +277,9 @@ fun numberPad(onClick: (String) -> Unit  ){
                     .height(60.dp)
             )
             Button(
-                onClick = {onClick(value)},
+                onClick = { if(value.isNotEmpty() && value[0]=='2' && (value[1]=='2' || value[1]=='3'||value[1]=='1'))
+                    onClick(value)
+                          },
                 modifier = Modifier
                     .width(100.dp)
                     .height(60.dp)
@@ -498,56 +500,6 @@ fun showSuccessSnackBar(onClick: () -> Unit)
         Text(text = "Attendance Marked")
     }
 }
-
-//@Composable
-//fun ModalBottomSheetNoDismiss(
-//    modifier: Modifier = Modifier,
-//    onDismissRequest: () -> Unit,
-//    content: @Composable () -> Unit
-//) {
-//    Box(
-//        modifier = modifier
-//            .pointerInput(Unit) {
-//                detectTapGestures(
-//                    onPress = { /* Do nothing */ },
-//                    onTap = { /* Do nothing */ }
-//                )
-//            },
-//    )
-//    {
-//        content()
-//    }
-//}
-//@Composable
-//fun LoadingDialog(
-//    isVisible: Boolean,
-//    onDismiss: () -> Unit
-//) {
-//    if (isVisible) {
-//        AlertDialog(
-//            onDismissRequest = onDismiss,
-//            title = {
-//                Row(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(20.dp),
-//                    horizontalArrangement = Arrangement.Center,
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    CircularProgressIndicator(
-//                        color = primaryColor,
-//                        strokeWidth = 2.dp
-//                    )
-////                    Spacer(modifier = Modifier.width(16.dp))
-////                    Text(text = "Loading")
-//                }
-//            },
-//            confirmButton = {
-//                // Empty confirm button, you can customize as needed
-//            }
-//        )
-//    }
-//}
 
 @Composable
 fun LoadingDialog(isShowingDialog: Boolean, dismissOnBackPress: Boolean = false, dismissOnClickOutside: Boolean = false) {
