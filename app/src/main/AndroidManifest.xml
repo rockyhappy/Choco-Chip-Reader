@@ -43,7 +43,10 @@
             android:exported="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ChocoChipReader">
+            android:theme="@style/Theme.ChocoChipReader"
+            tools:replace="screenOrientation"
+            android:stateNotNeeded="true"
+            >
 
         </activity>
     </application>

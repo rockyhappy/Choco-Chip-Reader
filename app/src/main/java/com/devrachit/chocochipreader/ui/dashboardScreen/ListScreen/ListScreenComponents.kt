@@ -11,6 +11,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,8 +50,10 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devrachit.chocochipreader.R
+import com.devrachit.chocochipreader.ui.theme.errorColor
 import com.devrachit.chocochipreader.ui.theme.grayShade4
 import com.devrachit.chocochipreader.ui.theme.primaryColor
+import com.devrachit.chocochipreader.ui.theme.successColor
 import kotlinx.coroutines.delay
 
 
@@ -248,4 +252,62 @@ fun BoxView(
     ) {
         content()
     }
+}
+
+@Composable
+fun listItem(name: String,is_hosteler: Boolean,is_present: Boolean=true,branch: String,student_number: String)
+{
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(10.dp))
+        ,
+        verticalAlignment = Alignment.CenterVertically,
+
+    ) {
+        Text(text = if(is_hosteler)"H" else "D",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = if(is_hosteler) successColor else errorColor,
+            modifier = Modifier.padding(start = 15.dp)
+        )
+        Column(
+            modifier = Modifier
+                .padding(start = 10.dp,top=5.dp,bottom=5.dp)
+        ) {
+            Row{
+                Text(text = "Name:",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(text = name,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            Row{
+                Text(text = "Branch:",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(text = branch,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            Row{
+                Text(text = "Student Number:",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(text = student_number,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+        }
+    }
+
 }

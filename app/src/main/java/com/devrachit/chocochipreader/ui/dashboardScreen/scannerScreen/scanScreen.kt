@@ -118,6 +118,9 @@ fun scanScreen(navController: NavController) {
     val onFlashClick: () -> Unit = {
         isFlashOn = !isFlashOn
     }
+    val onListClick: () -> Unit = {
+        navController.navigate("ListScreen")
+    }
 
     val onManualEntry: (String) -> Unit = { scan ->
         if (scan != null && scan != "") {
@@ -414,6 +417,15 @@ fun scanScreen(navController: NavController) {
                             }
                         }
                     }
+                    CircularIconButton(
+                        icon = R.drawable.baseline_person_24,
+                        onClick = {
+                            onListClick()
+                        },
+                        modifier = Modifier
+                            .padding(end=30.dp)
+                            .align(Alignment.TopEnd)
+                    )
                 }
 
                 Box(

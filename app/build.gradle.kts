@@ -96,7 +96,7 @@ dependencies {
     implementation("androidx.wear.compose:compose-ui-tooling:1.3.1")
     implementation ("com.google.android.material:material:1.11.0")
     implementation ("androidx.compose.material3:material3:1.2.1")
-
+    androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.4.1")
     implementation ("androidx.datastore:datastore-preferences:1.0.0-alpha04")
     implementation ("androidx.datastore:datastore-core:1.0.0-alpha04")
 
