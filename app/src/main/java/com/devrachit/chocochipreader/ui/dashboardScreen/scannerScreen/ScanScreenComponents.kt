@@ -278,8 +278,7 @@ fun numberPad(onClick: (String) -> Unit  ){
             )
             Button(
                 onClick = {
-                    if(value.isNotEmpty()
-                        && value[0]=='2'
+                    if(value.isNotEmpty() && value[0]=='2'
                         && (value[1]=='2' || value[1]=='3'||value[1]=='1'))
                     onClick(value)
                           },

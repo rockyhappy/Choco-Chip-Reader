@@ -79,7 +79,7 @@ class ScanScreenViewModel @Inject constructor(
         }
     }
 
-    fun markPresent(student_number: String, day: String) {
+    fun markPresent( day: String) {
         Log.d("markPresent", "called")
         viewModelScope.launch {
             try {
@@ -99,6 +99,11 @@ class ScanScreenViewModel @Inject constructor(
                 }
                 else
                 {
+                    when(response.code()){
+                        404 -> _errorMessage.value = "No Student matches the given query"
+                        400-> _errorMessage.value = "Day is not active or student is already marked present"
+                        else -> _errorMessage.value = response.errorBody().toString()
+                    }
                     _error.value = true
                     _errorMessage.value = response.errorBody().toString()
                 }
@@ -109,7 +114,7 @@ class ScanScreenViewModel @Inject constructor(
             }
         }
     }
-    fun unmarkPresent(student_number: String, day: String) {
+    fun unmarkPresent( day: String) {
         Log.d("markPresent", "called")
         viewModelScope.launch {
             try {
