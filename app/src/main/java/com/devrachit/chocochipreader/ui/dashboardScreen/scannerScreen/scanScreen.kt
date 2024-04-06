@@ -291,6 +291,7 @@ fun scanScreen(navController: NavController) {
     if (error.value) {
         Toast.makeText(context, errorMessage.value, Toast.LENGTH_SHORT).show()
         viewModel.onError()
+        code="9999999"
     }
 
 
