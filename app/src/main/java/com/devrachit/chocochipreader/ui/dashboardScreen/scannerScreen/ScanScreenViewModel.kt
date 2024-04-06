@@ -101,11 +101,11 @@ class ScanScreenViewModel @Inject constructor(
                 {
                     when(response.code()){
                         404 -> _errorMessage.value = "No Student matches the given query"
-                        400-> _errorMessage.value = "Day is not active or student is already marked present"
+                        400-> _errorMessage.value = "Day is not active "
                         else -> _errorMessage.value = response.errorBody().toString()
                     }
                     _error.value = true
-                    _errorMessage.value = response.errorBody().toString()
+                    //_errorMessage.value = response.errorBody().toString()
                 }
 
                 _loading.value = false
@@ -134,11 +134,13 @@ class ScanScreenViewModel @Inject constructor(
                 }
                 else
                 {
+                    when(response.code()){
+                        404 -> _errorMessage.value = "No Student matches the given query"
+                        400-> _errorMessage.value = "Day is not active "
+                        else -> _errorMessage.value = response.errorBody().toString()
+                    }
                     _error.value = true
-                    _errorMessage.value =
-                        if(response.code()==404) "Student not found"
-                    else response.errorBody().toString()
-                    Log.d("unmarkPresent", response.errorBody().toString())
+                    //_errorMessage.value = response.errorBody().toString()
                 }
 
                 _loading.value = false
