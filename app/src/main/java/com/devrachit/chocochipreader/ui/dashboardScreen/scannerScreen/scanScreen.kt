@@ -154,6 +154,7 @@ fun scanScreen(navController: NavController) {
     if (loading.value) {
 
         LoadingDialog(isShowingDialog = loading.value)
+        code="9999999"
 
     }
 
@@ -238,6 +239,7 @@ fun scanScreen(navController: NavController) {
     LaunchedEffect(scanComplete.value) {
         if (scanComplete.value) {
             showFinalSheet = true
+            code="99999999"
             barcodeAnalysisEnabled = true
             viewModel.onScanComplete()
         }
@@ -261,8 +263,8 @@ fun scanScreen(navController: NavController) {
             ) {
                 Text(
                     text =
-                    if (lastApiCall.value == 1) "Attendance Marked for ${code}"
-                    else "Attendance Unmarked for ${code}",
+                    if (lastApiCall.value == 1) "Attendance Marked for ${viewModel.sharedViewModel.data.value!!.name}"
+                    else  "Attendance Unmarked for ${viewModel.sharedViewModel.data.value!!.name}",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color =
@@ -290,8 +292,9 @@ fun scanScreen(navController: NavController) {
     val errorMessage = viewModel.errorMessage.collectAsStateWithLifecycle()
     if (error.value) {
         Toast.makeText(context, errorMessage.value, Toast.LENGTH_SHORT).show()
+        code="99999999"
         viewModel.onError()
-        code="9999999"
+        barcodeAnalysisEnabled = true
     }
 
 
