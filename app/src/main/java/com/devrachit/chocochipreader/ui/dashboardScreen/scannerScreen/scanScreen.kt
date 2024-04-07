@@ -3,6 +3,7 @@ package com.devrachit.chocochipreader.ui.dashboardScreen.scannerScreen
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Build
@@ -78,6 +79,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.devrachit.chocochipreader.Constants.customFontFamily
+import com.devrachit.chocochipreader.ListActivity
+import com.devrachit.chocochipreader.MainActivity
 import com.devrachit.chocochipreader.QrCodeAnalyzer
 import com.devrachit.chocochipreader.R
 import com.devrachit.chocochipreader.ui.theme.errorColor
@@ -119,7 +122,9 @@ fun scanScreen(navController: NavController) {
         isFlashOn = !isFlashOn
     }
     val onListClick: () -> Unit = {
-        navController.navigate("ListScreen")
+        val intent= Intent(context, ListActivity::class.java)
+        context.startActivity(intent)
+//        (context as MainActivity).finish()
     }
 
     val onManualEntry: (String) -> Unit = { scan ->
