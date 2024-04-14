@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -62,6 +64,7 @@ import com.devrachit.chocochipreader.ui.theme.primaryColor
 import com.devrachit.chocochipreader.ui.theme.secondaryColor
 import com.devrachit.chocochipreader.ui.theme.successColor
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.modifier.modifierLocalConsumer
 
 
 @Composable
@@ -125,8 +128,8 @@ fun head(
 //                fontWeight = Bold,
                 fontStyle = FontStyle.Normal,
                 color = Color.Black,
-                modifier=Modifier
-                    .padding(start=10.dp)
+                modifier = Modifier
+                    .padding(start = 10.dp)
             )
         }
         Row()
@@ -146,8 +149,8 @@ fun head(
 //                fontWeight = Bold,
                 fontStyle = FontStyle.Normal,
                 color = Color.Black,
-                modifier=Modifier
-                    .padding(start=10.dp)
+                modifier = Modifier
+                    .padding(start = 10.dp)
             )
         }
         Row()
@@ -167,8 +170,8 @@ fun head(
 //                fontWeight = Bold,
                 fontStyle = FontStyle.Normal,
                 color = Color.Black,
-                modifier=Modifier
-                    .padding(start=10.dp)
+                modifier = Modifier
+                    .padding(start = 10.dp)
             )
         }
         Row()
@@ -182,14 +185,14 @@ fun head(
                 color = Color.Black
             )
             Text(
-                text =if( data.value?.is_hosteler.toString().toBoolean()) "Yes" else "No",
+                text = if (data.value?.is_hosteler.toString().toBoolean()) "Yes" else "No",
                 fontSize = 20.sp,
                 fontFamily = customFontFamily,
 //                fontWeight = Bold,
                 fontStyle = FontStyle.Normal,
                 color = Color.Black,
-                modifier=Modifier
-                    .padding(start=10.dp)
+                modifier = Modifier
+                    .padding(start = 10.dp)
             )
         }
         Row(
@@ -203,26 +206,27 @@ fun head(
         {
             Button(
                 onClick = {
-                    if(data.value?.is_present.toString().toBoolean())
+                    if (data.value?.is_present.toString().toBoolean())
                         unmarkPresent()
                     else
-                        markpresent()},
+                        markpresent()
+                },
                 enabled = enabled,
                 modifier = Modifier
                     .width(100.dp)
                     .height(60.dp)
                     .weight(0.4f),
-                shape = RoundedCornerShape(16.dp,16.dp,16.dp,16.dp),
+                shape = RoundedCornerShape(16.dp, 16.dp, 16.dp, 16.dp),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.White,
                     containerColor =
-                    if(data.value?.is_present.toString().toBoolean()) errorColor
+                    if (data.value?.is_present.toString().toBoolean()) errorColor
                     else primaryColor
                 )
             ) {
                 Text(
                     text =
-                    if(data.value?.is_present.toString().toBoolean())"Mark Absent"
+                    if (data.value?.is_present.toString().toBoolean()) "Mark Absent"
                     else "Mark Present",
                     color = Color.White,
                     fontSize = 15.sp,
@@ -235,28 +239,28 @@ fun head(
 }
 
 @Composable
-fun numberPad(onClick: (String) -> Unit  ){
+fun numberPad(onClick: (String) -> Unit) {
 
     var value by remember { mutableStateOf("") }
     Column(
-        modifier= Modifier
+        modifier = Modifier
             .background(Color.White)
             .padding(start = 30.dp, end = 30.dp)
     )
     {
         Row(
-            modifier= Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, bottom = 20.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
 
-        )
+            )
         {
             OutlinedTextField(
                 value = value,
                 onValueChange = { value = it },
-                shape = RoundedCornerShape(16.dp,0.dp,0.dp,16.dp),
+                shape = RoundedCornerShape(16.dp, 0.dp, 0.dp, 16.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -277,14 +281,15 @@ fun numberPad(onClick: (String) -> Unit  ){
                     .height(60.dp)
             )
             Button(
-                onClick = { if(value.isNotEmpty() && value[0]=='2' && (value[1]=='2' || value[1]=='3'||value[1]=='1'))
-                    onClick(value)
-                          },
+                onClick = {
+                    if (value.isNotEmpty() && value[0] == '2' && (value[1] == '2' || value[1] == '3' || value[1] == '1'))
+                        onClick(value)
+                },
                 modifier = Modifier
                     .width(100.dp)
                     .height(60.dp)
                     .weight(0.4f),
-                shape = RoundedCornerShape(0.dp,16.dp,16.dp,0.dp),
+                shape = RoundedCornerShape(0.dp, 16.dp, 16.dp, 0.dp),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.White,
                     containerColor = primaryColor
@@ -294,14 +299,14 @@ fun numberPad(onClick: (String) -> Unit  ){
             }
         }
         Row(
-            modifier=Modifier
+            modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         )
         {
             OutlinedButton(
-                onClick = {value+="1"},
+                onClick = { value += "1" },
                 border = BorderStroke(0.5.dp, secondaryColor),
                 shape = RoundedCornerShape(15),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -315,7 +320,7 @@ fun numberPad(onClick: (String) -> Unit  ){
                 Text(text = "1")
             }
             OutlinedButton(
-                onClick = {value+="2"},
+                onClick = { value += "2" },
                 border = BorderStroke(0.5.dp, secondaryColor),
                 shape = RoundedCornerShape(15),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -329,7 +334,7 @@ fun numberPad(onClick: (String) -> Unit  ){
                 Text(text = "2")
             }
             OutlinedButton(
-                onClick = {value+="3"},
+                onClick = { value += "3" },
                 border = BorderStroke(0.5.dp, secondaryColor),
                 shape = RoundedCornerShape(15),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -344,13 +349,13 @@ fun numberPad(onClick: (String) -> Unit  ){
             }
         }
         Row(
-            modifier=Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         )
         {
             OutlinedButton(
-                onClick = {value+="4"},
+                onClick = { value += "4" },
                 border = BorderStroke(0.5.dp, secondaryColor),
                 shape = RoundedCornerShape(15),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -364,7 +369,7 @@ fun numberPad(onClick: (String) -> Unit  ){
                 Text(text = "4")
             }
             OutlinedButton(
-                onClick = {value+="5"},
+                onClick = { value += "5" },
                 border = BorderStroke(0.5.dp, secondaryColor),
                 shape = RoundedCornerShape(15),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -378,7 +383,7 @@ fun numberPad(onClick: (String) -> Unit  ){
                 Text(text = "5")
             }
             OutlinedButton(
-                onClick = {value+="6"},
+                onClick = { value += "6" },
                 border = BorderStroke(0.5.dp, secondaryColor),
                 shape = RoundedCornerShape(15),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -393,13 +398,13 @@ fun numberPad(onClick: (String) -> Unit  ){
             }
         }
         Row(
-            modifier=Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         )
         {
             OutlinedButton(
-                onClick = {value+="7"},
+                onClick = { value += "7" },
                 border = BorderStroke(0.5.dp, secondaryColor),
                 shape = RoundedCornerShape(15),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -413,7 +418,7 @@ fun numberPad(onClick: (String) -> Unit  ){
                 Text(text = "7")
             }
             OutlinedButton(
-                onClick = {value+="8"},
+                onClick = { value += "8" },
                 border = BorderStroke(0.5.dp, secondaryColor),
                 shape = RoundedCornerShape(15),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -427,7 +432,7 @@ fun numberPad(onClick: (String) -> Unit  ){
                 Text(text = "8")
             }
             OutlinedButton(
-                onClick = {value+="9"},
+                onClick = { value += "9" },
                 border = BorderStroke(0.5.dp, secondaryColor),
                 shape = RoundedCornerShape(15),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -442,7 +447,7 @@ fun numberPad(onClick: (String) -> Unit  ){
             }
         }
         Row(
-            modifier= Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 30.dp),
             horizontalArrangement = Arrangement.Center,
@@ -450,7 +455,7 @@ fun numberPad(onClick: (String) -> Unit  ){
         )
         {
             OutlinedButton(
-                onClick = {value+="0"},
+                onClick = { value += "0" },
                 border = BorderStroke(0.5.dp, secondaryColor),
                 shape = RoundedCornerShape(15),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -464,7 +469,7 @@ fun numberPad(onClick: (String) -> Unit  ){
                 Text(text = "0")
             }
             OutlinedButton(
-                onClick = {value = value.dropLast(1)},
+                onClick = { value = value.dropLast(1) },
                 border = BorderStroke(0.5.dp, secondaryColor),
                 shape = RoundedCornerShape(15),
                 colors = ButtonDefaults.outlinedButtonColors(
@@ -475,7 +480,8 @@ fun numberPad(onClick: (String) -> Unit  ){
                     .padding(5.dp)
                     .weight(1f)
             ) {
-                Icon(contentDescription = null,
+                Icon(
+                    contentDescription = null,
                     painter = painterResource(id = R.drawable.back),
                     tint = Color.Black,
                     modifier = Modifier.size(20.dp)
@@ -485,9 +491,9 @@ fun numberPad(onClick: (String) -> Unit  ){
     }
 
 }
+
 @Composable
-fun showSuccessSnackBar(onClick: () -> Unit)
-{
+fun showSuccessSnackBar(onClick: () -> Unit) {
     Snackbar(
         modifier = Modifier.padding(16.dp),
         action = {
@@ -502,7 +508,11 @@ fun showSuccessSnackBar(onClick: () -> Unit)
 }
 
 @Composable
-fun LoadingDialog(isShowingDialog: Boolean, dismissOnBackPress: Boolean = false, dismissOnClickOutside: Boolean = false) {
+fun LoadingDialog(
+    isShowingDialog: Boolean,
+    dismissOnBackPress: Boolean = false,
+    dismissOnClickOutside: Boolean = false
+) {
     if (isShowingDialog) {
         Dialog(
             onDismissRequest = { },
@@ -529,9 +539,71 @@ fun DialogContent() {
         CircularProgressIndicator(
             modifier = Modifier
                 .size(48.dp)
-                .align(Alignment.Center)
-                ,
+                .align(Alignment.Center),
             color = primaryColor
+        )
+    }
+}
+
+@Composable
+fun OverlayForScanner() {
+//    Box(
+//        modifier = Modifier
+//            .height(200.dp)
+//            .width(3.dp)
+//            .background(Color.Red)
+//    )
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    )
+    {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(Color.Black.copy(alpha = 0.8f))
+                .align(Alignment.CenterHorizontally)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        )
+        {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
+                    .background(Color.Black.copy(alpha = 0.8f))
+
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(250.dp)
+                    .clip(RoundedCornerShape(36.dp))
+                    .background(Color.Transparent)
+                    .clip(RoundedCornerShape(36.dp))
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
+                    .background(Color.Black.copy(alpha = 0.8f))
+
+            )
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(Color.Black.copy(alpha = 0.8f))
+                .align(Alignment.CenterHorizontally)
         )
     }
 }

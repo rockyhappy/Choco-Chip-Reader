@@ -3,6 +3,7 @@ package com.devrachit.chocochipreader.ui.dashboardScreen.scannerScreen
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Build
@@ -78,6 +79,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.devrachit.chocochipreader.Constants.customFontFamily
+import com.devrachit.chocochipreader.ListActivity
+import com.devrachit.chocochipreader.MainActivity
 import com.devrachit.chocochipreader.QrCodeAnalyzer
 import com.devrachit.chocochipreader.R
 import com.devrachit.chocochipreader.ui.theme.errorColor
@@ -119,7 +122,9 @@ fun scanScreen(navController: NavController) {
         isFlashOn = !isFlashOn
     }
     val onListClick: () -> Unit = {
-        navController.navigate("ListScreen")
+        val intent= Intent(context, ListActivity::class.java)
+        context.startActivity(intent)
+//        (context as MainActivity).finish()
     }
 
     val onManualEntry: (String) -> Unit = { scan ->
@@ -302,6 +307,11 @@ fun scanScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize()
     ) {
         if (hasCameraPermission) {
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .background(Color.Transparent) // Adjust alpha for darkness level
+//            )
             Box()
             {
                 AndroidView(
@@ -365,6 +375,27 @@ fun scanScreen(navController: NavController) {
                         .fillMaxWidth()
                         .fillMaxSize()
                 )
+                OverlayForScanner()
+                Box(
+                    modifier = Modifier
+                        .height(400.dp)
+                        .width(3.dp)
+                        .background(Color.Red)
+                        .align(Alignment.Center)
+                )
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .background(Color.Black.copy(alpha = 0.8f))
+//                        .align(Alignment.Center)
+//                )
+//                Box(
+//                    modifier = Modifier
+//                        .height(200.dp)
+//                        .width(200.dp)
+//                        .background(Color.White.copy(alpha = 0.15f))
+//                        .align(Alignment.Center)
+//                )
                 CircularIconButton(
                     icon = R.drawable.flash,
                     onClick = {
@@ -427,7 +458,7 @@ fun scanScreen(navController: NavController) {
                             onListClick()
                         },
                         modifier = Modifier
-                            .padding(end=30.dp)
+                            .padding(end = 30.dp)
                             .align(Alignment.TopEnd)
                     )
                 }
