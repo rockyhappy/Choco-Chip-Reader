@@ -3,6 +3,7 @@ package com.devrachit.chocochipreader.ui.dashboardScreen.scannerScreen
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Build
@@ -78,6 +79,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.devrachit.chocochipreader.Constants.customFontFamily
+import com.devrachit.chocochipreader.ListActivity
+import com.devrachit.chocochipreader.MainActivity
 import com.devrachit.chocochipreader.QrCodeAnalyzer
 import com.devrachit.chocochipreader.R
 import com.devrachit.chocochipreader.ui.theme.errorColor
@@ -119,7 +122,9 @@ fun scanScreen(navController: NavController) {
         isFlashOn = !isFlashOn
     }
     val onListClick: () -> Unit = {
-        navController.navigate("ListScreen")
+        val intent= Intent(context, ListActivity::class.java)
+        context.startActivity(intent)
+//        (context as MainActivity).finish()
     }
 
     val onManualEntry: (String) -> Unit = { scan ->
@@ -154,6 +159,7 @@ fun scanScreen(navController: NavController) {
     if (loading.value) {
 
         LoadingDialog(isShowingDialog = loading.value)
+        code="9999999"
 
     }
 
@@ -238,6 +244,7 @@ fun scanScreen(navController: NavController) {
     LaunchedEffect(scanComplete.value) {
         if (scanComplete.value) {
             showFinalSheet = true
+            code="99999999"
             barcodeAnalysisEnabled = true
             viewModel.onScanComplete()
         }
@@ -261,8 +268,8 @@ fun scanScreen(navController: NavController) {
             ) {
                 Text(
                     text =
-                    if (lastApiCall.value == 1) "Attendance Marked for ${code}"
-                    else "Attendance Unmarked for ${code}",
+                    if (lastApiCall.value == 1) "Attendance Marked for ${viewModel.sharedViewModel.data.value!!.name}"
+                    else  "Attendance Unmarked for ${viewModel.sharedViewModel.data.value!!.name}",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color =
@@ -290,7 +297,9 @@ fun scanScreen(navController: NavController) {
     val errorMessage = viewModel.errorMessage.collectAsStateWithLifecycle()
     if (error.value) {
         Toast.makeText(context, errorMessage.value, Toast.LENGTH_SHORT).show()
+        code="99999999"
         viewModel.onError()
+        barcodeAnalysisEnabled = true
     }
 
 
@@ -298,6 +307,11 @@ fun scanScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize()
     ) {
         if (hasCameraPermission) {
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .background(Color.Transparent) // Adjust alpha for darkness level
+//            )
             Box()
             {
                 AndroidView(
@@ -361,6 +375,27 @@ fun scanScreen(navController: NavController) {
                         .fillMaxWidth()
                         .fillMaxSize()
                 )
+                OverlayForScanner()
+                Box(
+                    modifier = Modifier
+                        .height(400.dp)
+                        .width(3.dp)
+                        .background(Color.Red)
+                        .align(Alignment.Center)
+                )
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .background(Color.Black.copy(alpha = 0.8f))
+//                        .align(Alignment.Center)
+//                )
+//                Box(
+//                    modifier = Modifier
+//                        .height(200.dp)
+//                        .width(200.dp)
+//                        .background(Color.White.copy(alpha = 0.15f))
+//                        .align(Alignment.Center)
+//                )
                 CircularIconButton(
                     icon = R.drawable.flash,
                     onClick = {
@@ -423,7 +458,7 @@ fun scanScreen(navController: NavController) {
                             onListClick()
                         },
                         modifier = Modifier
-                            .padding(end=30.dp)
+                            .padding(end = 30.dp)
                             .align(Alignment.TopEnd)
                     )
                 }
