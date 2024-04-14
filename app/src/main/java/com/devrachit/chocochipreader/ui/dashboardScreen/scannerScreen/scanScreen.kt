@@ -307,6 +307,11 @@ fun scanScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize()
     ) {
         if (hasCameraPermission) {
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .background(Color.Transparent) // Adjust alpha for darkness level
+//            )
             Box()
             {
                 AndroidView(
@@ -370,6 +375,27 @@ fun scanScreen(navController: NavController) {
                         .fillMaxWidth()
                         .fillMaxSize()
                 )
+                OverlayForScanner()
+                Box(
+                    modifier = Modifier
+                        .height(400.dp)
+                        .width(3.dp)
+                        .background(Color.Red)
+                        .align(Alignment.Center)
+                )
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .background(Color.Black.copy(alpha = 0.8f))
+//                        .align(Alignment.Center)
+//                )
+//                Box(
+//                    modifier = Modifier
+//                        .height(200.dp)
+//                        .width(200.dp)
+//                        .background(Color.White.copy(alpha = 0.15f))
+//                        .align(Alignment.Center)
+//                )
                 CircularIconButton(
                     icon = R.drawable.flash,
                     onClick = {
@@ -432,7 +458,7 @@ fun scanScreen(navController: NavController) {
                             onListClick()
                         },
                         modifier = Modifier
-                            .padding(end=30.dp)
+                            .padding(end = 30.dp)
                             .align(Alignment.TopEnd)
                     )
                 }
