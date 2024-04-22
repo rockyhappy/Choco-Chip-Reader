@@ -28,6 +28,7 @@ fun ListScreen(navController: NavController) {
         selected = it
         viewModel.checkAttendance("day$it")
     }
+    var size by remember { mutableStateOf(0) }
     val loading = viewModel.loading.collectAsStateWithLifecycle()
     val apiCallMade = viewModel.apiCallMade.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = true) {
@@ -40,7 +41,7 @@ fun ListScreen(navController: NavController) {
         contentPadding = PaddingValues(5.dp),
     )
     {
-        item { ProfileNavigation(selected = selected, onItemSelected = onItemClick) }
+        item { ProfileNavigation(selected = selected, onItemSelected = onItemClick, size=size) }
 
         when (selected) {
             1 -> {
@@ -50,6 +51,9 @@ fun ListScreen(navController: NavController) {
                     }
                 } else if(apiCallMade.value) {
                     items(viewModel.sharedViewModel.dataList.value!!.size) {
+                        if(viewModel.sharedViewModel.dataList.value!!.size>0)
+                        size=viewModel.sharedViewModel.dataList.value!!.size
+                        else size=0
                         listItem(
                             name = viewModel.sharedViewModel.dataList.value!![it].name,
                             is_hosteler = viewModel.sharedViewModel.dataList.value!![it].is_hosteler,
@@ -67,6 +71,9 @@ fun ListScreen(navController: NavController) {
                     }
                 } else if(apiCallMade.value) {
                     items(viewModel.sharedViewModel.dataList.value!!.size) {
+                        if(viewModel.sharedViewModel.dataList.value!!.size>0)
+                        size=viewModel.sharedViewModel.dataList.value!!.size
+                        else size=0
                         listItem(
                             name = viewModel.sharedViewModel.dataList.value!![it].name,
                             is_hosteler = viewModel.sharedViewModel.dataList.value!![it].is_hosteler,
@@ -85,6 +92,9 @@ fun ListScreen(navController: NavController) {
                     }
                 } else if(apiCallMade.value) {
                     items(viewModel.sharedViewModel.dataList.value!!.size) {
+                        if(viewModel.sharedViewModel.dataList.value!!.size>0)
+                        size=viewModel.sharedViewModel.dataList.value!!.size
+                        else size=0
                         listItem(
                             name = viewModel.sharedViewModel.dataList.value!![it].name,
                             is_hosteler = viewModel.sharedViewModel.dataList.value!![it].is_hosteler,
@@ -102,6 +112,9 @@ fun ListScreen(navController: NavController) {
                     }
                 } else if(apiCallMade.value) {
                     items(viewModel.sharedViewModel.dataList.value!!.size) {
+                        if(viewModel.sharedViewModel.dataList.value!!.size>0)
+                        size=viewModel.sharedViewModel.dataList.value!!.size
+                        else size=0
                         listItem(
                             name = viewModel.sharedViewModel.dataList.value!![it].name,
                             is_hosteler = viewModel.sharedViewModel.dataList.value!![it].is_hosteler,
@@ -111,6 +124,26 @@ fun ListScreen(navController: NavController) {
                     }
                 }
             }
+            5 -> {
+                if (loading.value) {
+                    items(1) {
+                        LoadingDialog(isShowingDialog =loading.value)
+                    }
+                } else if(apiCallMade.value) {
+                    items(viewModel.sharedViewModel.dataList.value!!.size) {
+                        if(viewModel.sharedViewModel.dataList.value!!.size>0)
+                        size=viewModel.sharedViewModel.dataList.value!!.size
+                        else size=0
+                        listItem(
+                            name = viewModel.sharedViewModel.dataList.value!![it].name,
+                            is_hosteler = viewModel.sharedViewModel.dataList.value!![it].is_hosteler,
+                            branch =viewModel.sharedViewModel.dataList.value!![it].branch,
+                            student_number = viewModel.sharedViewModel.dataList.value!![it].student_number.toString()
+                        )
+                    }
+                }
+            }
+
         }
 
 

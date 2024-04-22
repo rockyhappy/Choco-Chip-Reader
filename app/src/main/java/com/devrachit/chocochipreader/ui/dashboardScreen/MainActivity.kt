@@ -1,4 +1,4 @@
-package com.devrachit.chocochipreader
+package com.devrachit.chocochipreader.ui.dashboardScreen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
