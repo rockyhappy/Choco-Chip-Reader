@@ -61,8 +61,26 @@ import kotlinx.coroutines.delay
 @Composable
 fun ProfileNavigation(
     selected: Int,
-    onItemSelected: (Int) -> Unit
+    onItemSelected: (Int) -> Unit,
+    size :Int
 ) {
+    Row()
+    {
+        Text(
+            text="Total: ",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = primaryColor,
+            modifier = Modifier.padding(start = 15.dp)
+        )
+        Text(
+            text=size.toString(),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = grayShade4,
+            modifier = Modifier.padding(start = 5.dp)
+        )
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,6 +110,11 @@ fun ProfileNavigation(
             text = "Day 4",
             selected = selected == 4,
             onClick = { onItemSelected(4) }
+        )
+        ProfileNavigationItem(
+            text = "Day 5",
+            selected = selected == 5,
+            onClick = { onItemSelected(5) }
         )
     }
 }
@@ -125,7 +148,7 @@ private fun ProfileNavigationItem(
 @Preview
 @Composable
 fun ProfileNavigationPreview() {
-    ProfileNavigation(selected = 1, onItemSelected = {})
+    ProfileNavigation(selected = 1, onItemSelected = {}, 0)
 }
 
 @Composable
@@ -311,3 +334,5 @@ fun listItem(name: String,is_hosteler: Boolean,is_present: Boolean=true,branch: 
     }
 
 }
+
+
