@@ -67,6 +67,7 @@ import com.devrachit.chocochipreader.Constants.customFontFamily
 import com.devrachit.chocochipreader.ui.dashboardScreen.ListActivity
 import com.devrachit.chocochipreader.QrCodeAnalyzer
 import com.devrachit.chocochipreader.R
+import com.devrachit.chocochipreader.ui.dashboardScreen.MainActivity
 import com.devrachit.chocochipreader.ui.theme.errorColor
 import com.devrachit.chocochipreader.ui.theme.successColor
 
@@ -211,6 +212,12 @@ fun scanScreen(navController: NavController) {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
+            if(!isGranted)
+            {
+                val intent= Intent(context, ListActivity::class.java)
+                context.startActivity(intent)
+                (context as MainActivity).finish()
+            }
             hasCameraPermission = isGranted
         }
     )

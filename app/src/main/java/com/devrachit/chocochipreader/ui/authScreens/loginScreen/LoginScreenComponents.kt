@@ -31,7 +31,7 @@ fun backBox()
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.75f)
+            .height(600.dp)
             .background(Color.White)
             .zIndex(0f)
 
