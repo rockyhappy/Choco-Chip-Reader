@@ -15,6 +15,9 @@ The Workshop Attendee Scanner is a versatile Android application developed using
 - **Customizable Workshops**: Supports the creation of multiple workshops with individualized attendance tracking and management.
 - **Export Attendance Data**: Allows exporting attendance data for further analysis or record-keeping purposes.
 
+## Samples 
+https://github.com/rockyhappy/Choco-Chip-Reader/blob/master/Screen_recording_20240424_145826.mp4
+
 ## Dependencies
 The Workshop Attendee Scanner relies on the following key dependencies:
 - **Jetpack Compose**: A modern UI toolkit for building native Android UIs declaratively.
