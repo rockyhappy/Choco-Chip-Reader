@@ -19,13 +19,15 @@ The Workshop Attendee Scanner is a versatile Android application developed using
 
 https://github.com/rockyhappy/Choco-Chip-Reader/assets/115190222/84cc7df5-f99e-4fc2-aeed-0f4380cc127a
 
-<img src="https://github.com/rockyhappy/Choco-Chip-Reader/assets/115190222/6e4bf355-ce40-4766-b877-d0dc798752ef" alt="News App Screenshot 1" width="250">
 
-<img src="https://github.com/rockyhappy/Choco-Chip-Reader/assets/115190222/1180cd87-077f-489b-a66a-f0aed001aa7a" alt="News App Screenshot 1" width="250">
-
-<img src="https://github.com/rockyhappy/Choco-Chip-Reader/assets/115190222/2fc21ff3-56fc-4469-a53b-28e1e91622b7" alt="News App Screenshot 1" width="250">
-
-
+<div style="display: inline-block; margin-right: 20px; display: flex; justify-content: space-around;">
+<img src="https://github.com/rockyhappy/Choco-Chip-Reader/assets/115190222/6e4bf355-ce40-4766-b877-d0dc798752ef" alt="News App Screenshot 1" width="200">
+<!-- Add space here -->
+<img src="https://github.com/rockyhappy/Choco-Chip-Reader/assets/115190222/1180cd87-077f-489b-a66a-f0aed001aa7a" alt="News App Screenshot 1" width="200">
+<!-- Add space here -->
+<img src="https://github.com/rockyhappy/Choco-Chip-Reader/assets/115190222/2fc21ff3-56fc-4469-a53b-28e1e91622b7" alt="News App Screenshot 1" width="200">
+  
+</div>
 
 
 ## Dependencies
