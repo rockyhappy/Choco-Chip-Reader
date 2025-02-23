@@ -26,6 +26,7 @@ https://github.com/rockyhappy/Choco-Chip-Reader/assets/115190222/84cc7df5-f99e-4
 <img src="https://github.com/rockyhappy/Choco-Chip-Reader/assets/115190222/1180cd87-077f-489b-a66a-f0aed001aa7a" alt="News App Screenshot 1" width="200">
 <!-- Add space here -->
 <img src="https://github.com/rockyhappy/Choco-Chip-Reader/assets/115190222/2fc21ff3-56fc-4469-a53b-28e1e91622b7" alt="News App Screenshot 1" width="200">
+<img src="https://github.com/Yash114Bansal/Event-Entry/blob/main/evententry/docs/ScreenShot.png" alt="News App Screenshot 1" width="1000">
   
 </div>
 
